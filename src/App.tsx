@@ -207,7 +207,7 @@ export default function App() {
           initial={{ opacity: 0, rotate: 15, scale: 0 }}
           animate={{ opacity: 1, rotate: -8, scale: 1 }}
           transition={{ delay: 1.2, type: "spring" }}
-          className="absolute top-1/4 right-[5%] md:right-[15%] stamp"
+          className="absolute top-24 right-4 md:top-1/4 md:right-[15%] stamp scale-[0.65] md:scale-100 origin-top-right z-10"
         >
           ŚWIEŻO WĘDZONE
         </motion.div>
@@ -397,8 +397,7 @@ export default function App() {
             >
               <Quote className="absolute top-6 right-6 text-teal opacity-10" size={64} />
               <p className="text-lg italic mb-6 text-text relative z-10">
-                "Pyszne rybki, wszystko świeżo uwędzone na miejscu. Klimat prawdziwego morsiego portu. 
-                Paprykarz - poezja smaku!"
+                "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb - wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna."
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-teal-light/20 rounded-full flex items-center justify-center font-display text-teal text-xl">M</div>
@@ -417,8 +416,7 @@ export default function App() {
             >
               <Quote className="absolute top-6 right-6 text-amber opacity-10" size={64} />
               <p className="text-lg italic mb-6 text-text relative z-10">
-                "Gołąbki rybne to absolutny hit! Nigdy nie jadłam czegoś tak dobrego. 
-                Bardzo miła obsługa i wspaniała lokalizacja blisko plaży."
+                "Świeże, doskonale otulone szczerością, przyprawione od serca i podane z uśmiechem przepyszne ryby."
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-amber-light/20 rounded-full flex items-center justify-center font-display text-amber text-xl">A</div>
