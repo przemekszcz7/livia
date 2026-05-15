@@ -24,7 +24,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Add your deployment steps here (e.g., Firebase, GitHub Pages, etc.)
-      # Since this app runs in AI Studio's Cloud Run environment, 
-      # the platform handles its own deployment workflow.
-      # This file is provided as requested for user's GitHub integration.
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
