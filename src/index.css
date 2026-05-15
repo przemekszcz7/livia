@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Playfair Display", serif;
+  --font-subheading: "Lora", serif;
+  --font-body: "Lora", serif;
+  --font-mono: "Courier Prime", monospace;
+
+  --color-bg: #F2E8D9;
+  --color-bg-section: #E8DCCB;
+  --color-bg-dark: #1E1508;
+  --color-bg-darker: #110D04;
+  --color-brown: #6B3F1E;
+  --color-brown-light: #A0622A;
+  --color-amber: #D4892A;
+  --color-amber-light: #F0B96A;
+  --color-teal: #2E6B6B;
+  --color-teal-light: #4A9494;
+  --color-red: #8B2E1A;
+  --color-text: #1E1508;
+  --color-text-muted: #7A6548;
+  --color-text-light: #F2E8D9;
+  --color-white: #FDF8F0;
+}
+
+@layer base {
+  body {
+    @apply bg-bg text-text font-body;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-text;
+  }
+}
+
+@layer utilities {
+  .texture-wood {
+    background-image: 
+      repeating-linear-gradient(
+        90deg,
+        rgba(0,0,0,0.15) 0px,
+        rgba(0,0,0,0.15) 1px,
+        transparent 1px,
+        transparent 4px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.05) 0%,
+        transparent 100%
+      );
+    background-color: var(--color-bg-dark);
+  }
+
+  .texture-net {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 L60 60 M60 0 L0 60' stroke='%23000' stroke-width='0.5' fill='none' stroke-opacity='0.1' /%3E%3C/svg%3E");
+  }
+
+  .rope-border {
+    border-style: dashed;
+    border-color: var(--color-brown-light);
+    border-width: 3px;
+  }
+
+  .lantern-glow {
+    background: radial-gradient(circle at top right, rgba(212, 137, 42, 0.15) 0%, transparent 70%);
+  }
+
+  .stamp {
+    @apply border-2 border-red text-red font-mono px-4 py-2 inline-block rounded-full transform -rotate-12 select-none;
+    box-shadow: inset 0 0 0 1px #8B2E1A;
+  }
+
+  .section-divider {
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 100' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 C200,80 400,20 600,50 C800,80 1000,20 1000,50 L1000,100 L0,100 Z' fill='%23F2E8D9' /%3E%3C/svg%3E");
+    background-size: 100% 100%;
+  }
+
+  .section-divider-dark {
+    height: 30px;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 100' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 C150,20 350,80 500,50 C650,20 850,80 1000,50 L1000,100 L0,100 Z' fill='%23110D04' /%3E%3C/svg%3E");
+    background-size: 100% 100%;
+  }
+}

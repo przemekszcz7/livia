@@ -1,0 +1,8 @@
+{
+  "name": "Livia - Smażalnia i Wędzarnia Ryb",
+  "description": "Tradycyjna smażalnia i wędzarnia ryb w Niechorzu. Świeże ryby, własne wyroby i wyjątkowy morski klimat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
