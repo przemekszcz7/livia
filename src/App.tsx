@@ -58,6 +58,48 @@ const PRODUCTS = [
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
     image: "https://i.postimg.cc/fRDj7gmb/505584261-122115716918871736-8185831084064450162-n.jpg"
+  },
+  {
+    id: 6,
+    title: "Burger Rybny",
+    desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
+    image: "https://i.postimg.cc/B630JKzT/695348600-923868270701996-4656282206694215808-n.jpg"
+  },
+  {
+    id: 7,
+    title: "Zupa Pomidorowa",
+    desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
+    image: "https://i.postimg.cc/Ss4hmMPL/700396217-1533059238346518-8963335887176995326-n.jpg"
+  },
+  {
+    id: 8,
+    title: "Witryna sklepowa",
+    desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
+    image: "https://i.postimg.cc/LXSpm1Ws/701611589-1483948843187296-4365766202052196366-n.jpg"
+  },
+  {
+    id: 9,
+    title: "Nasza Wędzarnia",
+    desc: "Tradycyjne wędzenie na drewnie olchowym dla unikalnego aromatu",
+    image: "https://i.postimg.cc/W3VvskyF/699827953-1522689946183820-9209926211936458734-n.jpg"
+  },
+  {
+    id: 10,
+    title: "Śledzie w różnych smakach",
+    desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
+    image: "https://i.postimg.cc/ydKH7ZGJ/696496514-998136589395264-3632873255766360899-n.jpg"
+  },
+  {
+    id: 11,
+    title: "Wędzone ryby",
+    desc: "Złociste i soczyste specjały, wędzone na miejscu każdego dnia",
+    image: "https://i.postimg.cc/ZRmSJdQy/695144514-1537371941336070-595221759149372261-n.jpg"
+  },
+  {
+    id: 12,
+    title: "Wędzone ryby",
+    desc: "Tradycyjny smak i aromat bałtyckiego wędzenia w najlepszym wydaniu",
+    image: "https://i.postimg.cc/qRrTp3FN/696350736-952242117653610-8205760944439390768-n.jpg"
   }
 ];
 
@@ -225,7 +267,6 @@ export default function App() {
             <h2 className="text-5xl md:text-6xl mb-6">Tradycja na Talerzu</h2>
             <div className="max-w-2xl mx-auto">
               <p className="text-text-muted text-lg italic">
-                Każdego dnia podajemy to, co morskie fale przyniosły do portu. 
                 Nasze ryby wędzimy tradycyjną metodą na drewnie olchowym.
               </p>
             </div>
@@ -234,7 +275,7 @@ export default function App() {
             </div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {PRODUCTS.map((item, idx) => (
               <motion.div 
                 key={item.id}
@@ -242,9 +283,9 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-2xl transition-transform hover:-translate-y-2 border-t-[3px] border-amber"
+                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-all duration-500 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px]"
               >
-                <div className="relative h-72 overflow-hidden">
+                <div className="relative h-64 sm:h-72 overflow-hidden">
                   <img 
                     src={item.image} 
                     alt={item.title} 
@@ -252,41 +293,22 @@ export default function App() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-4 left-4 bg-amber text-xs font-mono px-3 py-1 text-white tracking-widest uppercase">
-                    Polecamy
+                  <div className="absolute bottom-4 left-4 bg-amber text-[10px] font-mono px-3 py-1 text-white tracking-widest uppercase">
+                    Specjał Domu
                   </div>
                 </div>
-                <div className="p-8 flex-1 flex flex-col justify-between bg-[#FDF4E7]">
+                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-[#FDF4E7]">
                   <div>
-                    <h3 className="text-2xl mb-2 text-brown">{item.title}</h3>
-                    <p className="text-text-muted leading-relaxed">{item.desc}</p>
+                    <h3 className="text-2xl mb-3 text-brown font-display">{item.title}</h3>
+                    <p className="text-text-muted leading-relaxed font-body text-sm">{item.desc}</p>
                   </div>
                   <div className="mt-6 pt-6 border-t border-brown/10 flex items-center justify-between">
-                    <span className="font-mono text-sm text-amber font-bold">LIVIA NIECHORZE</span>
-                    <Fish size={18} className="text-teal opacity-30" />
+                    <span className="font-mono text-[10px] text-amber font-bold tracking-tighter">SMAŻALNIA LIVIA</span>
+                    <Fish size={16} className="text-teal opacity-30" />
                   </div>
                 </div>
               </motion.div>
             ))}
-
-            {/* Special Callout Card */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="bg-bg-dark text-text-light p-10 rounded-[10px] flex flex-col justify-center items-center text-center relative overflow-hidden h-full min-h-[400px]"
-            >
-              <div className="absolute inset-0 texture-wood opacity-50" />
-              <div className="relative z-10">
-                <AnchorIcon />
-                <h3 className="text-3xl mt-6 mb-4 font-display">Świeża Ryba</h3>
-                <p className="font-mono text-sm text-amber-light mb-8 opacity-80 uppercase tracking-widest">Dostępna codziennie</p>
-                <p className="text-text-light/80 italic mb-8 px-4">
-                  "Ryba u nas nie czeka. To my na nią czekamy, by podać ją Państwu najświeższą, jak to możliwe."
-                </p>
-                <div className="w-12 h-[2px] bg-amber mx-auto" />
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -328,9 +350,13 @@ export default function App() {
                     <Clock className="text-amber" />
                   </div>
                   <div>
-                    <h4 className="font-display text-xl mb-1">Godziny otwarcia:</h4>
-                    <p className="text-text-light/70">Zapraszamy codziennie</p>
-                    <p className="text-xs font-mono text-amber-light/60 mt-1 uppercase">Sezon letni: 10:00 - do ostatniego gościa</p>
+                    <h4 className="font-display text-xl mb-1">Czynne:</h4>
+                    <p className="text-text-light/70 text-lg">Codziennie od 9:00</p>
+                    <div className="mt-4 p-4 bg-amber/10 border-l-2 border-amber rounded-r-md">
+                      <p className="text-amber-light font-display text-lg mb-1">Gorąca ryba z pieca:</p>
+                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider">Codziennie: 14:00</p>
+                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider mt-1">W ścisłym sezonie: 14:00 i 17:00</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -455,7 +481,7 @@ export default function App() {
               <p className="text-text-light/50 max-w-sm mb-8 leading-relaxed">
                 Tradycyjna smażalnia i wędzarnia ryb w Niechorzu. 
                 Pielęgnujemy smaki Bałtyku i dostarczamy to, co najlepsze 
-                prosto z morza na Państwa stoły.
+                na Państwa stoły.
               </p>
               <div className="flex gap-4">
                 <a href="https://www.facebook.com/profile.php?id=61576152080532" className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
