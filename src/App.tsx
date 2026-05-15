@@ -353,7 +353,7 @@ export default function App() {
                     <h4 className="font-display text-xl mb-1">Czynne:</h4>
                     <p className="text-text-light/70 text-lg">Codziennie od 9:00</p>
                     <div className="mt-4 p-4 bg-amber/10 border-l-2 border-amber rounded-r-md">
-                      <p className="text-amber-light font-display text-lg mb-1">Gorąca ryba z pieca:</p>
+                      <p className="text-amber-light font-display text-lg mb-1">Gorąca ryba:</p>
                       <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider">Codziennie: 14:00</p>
                       <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider mt-1">W ścisłym sezonie: 14:00 i 17:00</p>
                     </div>
