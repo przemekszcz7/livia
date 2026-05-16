@@ -357,7 +357,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 mt-20 md:mt-32">
           <div className="bg-[#FAF7F2] border-2 border-brown/10 rounded-2xl p-8 md:p-16 shadow-inner relative">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg px-6 py-2 border-2 border-amber rounded-full">
-              <span className="font-mono text-sm tracking-[0.3em] text-brown uppercase font-bold">Karta Dań</span>
+              <span className="font-mono text-sm tracking-[0.3em] text-brown uppercase font-bold whitespace-nowrap">Karta Dań</span>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
