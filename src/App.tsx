@@ -61,13 +61,13 @@ const PRODUCTS = [
   },
   {
     id: 6,
-    title: "Burger Rybny",
+    title: "Fishburger",
     desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
     image: "https://i.postimg.cc/B630JKzT/695348600-923868270701996-4656282206694215808-n.jpg"
   },
   {
     id: 7,
-    title: "Zupa Pomidorowa",
+    title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
     image: "https://i.postimg.cc/Ss4hmMPL/700396217-1533059238346518-8963335887176995326-n.jpg"
   },
@@ -91,15 +91,56 @@ const PRODUCTS = [
   },
   {
     id: 11,
-    title: "Wędzone ryby",
-    desc: "Złociste i soczyste specjały, wędzone na miejscu każdego dnia",
+    title: "Smażone ryby",
+    desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
     image: "https://i.postimg.cc/ZRmSJdQy/695144514-1537371941336070-595221759149372261-n.jpg"
   },
   {
     id: 12,
-    title: "Wędzone ryby",
-    desc: "Tradycyjny smak i aromat bałtyckiego wędzenia w najlepszym wydaniu",
+    title: "Smażone ryby",
+    desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
     image: "https://i.postimg.cc/qRrTp3FN/696350736-952242117653610-8205760944439390768-n.jpg"
+  }
+];
+
+const FULL_MENU = [
+  {
+    category: "RYBY SMAŻONE",
+    items: ["Dorsz filet", "Sandacz filet", "Miruna filet", "Flądra tusza", "Turbot tusza"]
+  },
+  {
+    category: "RYBY Z PIECA",
+    items: [
+      "Filet z łososia na maśle czoskowym z kompresji lub w sosie szpinakowym",
+      "Dorsz polędwica z czarniaka w sosie kurkowym, livorno lub szpinakowym",
+      "Filet z halibuta w sosie kurkowym, livorno lub szpinakowym"
+    ]
+  },
+  {
+    category: "ZUPY",
+    items: [
+      "Zupa rybna",
+      "Flaczki z kalmarów",
+      "Krem z pomidorów"
+    ]
+  },
+  {
+    category: "SPECJALNOŚCI",
+    items: [
+      "Gołąbki rybne w sosie pomidorowym",
+      "Fishburger",
+      "Bułka ze śledziem",
+      "Sałatki Śledziowe",
+      "Paprykarz (wyrób własny)"
+    ]
+  },
+  {
+    category: "RYBY WĘDZONE",
+    items: [
+      "Węgorz", "Amur", "Łosoś filet", "Łosoś dzwonko", "Halibut", "Maślana", 
+      "Dorsz", "Trewal", "Karmazyn", "Pstrąg", "Gładzica (flądra)", "Morszczuk", 
+      "Makrela", "Śledź", "Łosoś wędzony na zimno"
+    ]
   }
 ];
 
@@ -267,7 +308,7 @@ export default function App() {
             <h2 className="text-5xl md:text-6xl mb-6">Tradycja na Talerzu</h2>
             <div className="max-w-2xl mx-auto">
               <p className="text-text-muted text-lg italic">
-                Nasze ryby wędzimy tradycyjną metodą na drewnie olchowym.
+                Nasze ryby wędzimy tradycyjną metodą na drewnie olchowym i bukowym.
               </p>
             </div>
             <div className="mt-8 flex justify-center opacity-30">
@@ -309,6 +350,43 @@ export default function App() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+
+        {/* --- Detailed Text Menu --- */}
+        <div className="max-w-6xl mx-auto px-4 mt-20 md:mt-32">
+          <div className="bg-[#FAF7F2] border-2 border-brown/10 rounded-2xl p-8 md:p-16 shadow-inner relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg px-6 py-2 border-2 border-amber rounded-full">
+              <span className="font-mono text-sm tracking-[0.3em] text-brown uppercase font-bold">Karta Dań</span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
+              {FULL_MENU.map((section, sIdx) => (
+                <motion.div 
+                  key={sIdx}
+                  initial={{ opacity: 0, x: sIdx % 2 === 0 ? -20 : 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="space-y-6"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="h-[2px] flex-1 bg-amber/30" />
+                    <h3 className="font-display text-2xl md:text-3xl text-brown uppercase tracking-tight">{section.category}</h3>
+                    <div className="h-[2px] flex-1 bg-amber/30" />
+                  </div>
+                  <ul className="space-y-3">
+                    {section.items.map((item, iIdx) => (
+                      <li key={iIdx} className="flex items-baseline gap-4 group">
+                        <span className="text-text-muted font-body leading-relaxed group-hover:text-amber transition-colors">
+                          {item}
+                        </span>
+                        <div className="flex-1 border-b border-dotted border-brown/20" />
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -423,7 +501,7 @@ export default function App() {
             >
               <Quote className="absolute top-6 right-6 text-teal opacity-10" size={64} />
               <p className="text-lg italic mb-6 text-text relative z-10">
-                "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb - wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna."
+                "Bardzo smaczna ryba, wszystko dobrze przygotowane. Duży wybór ryb - wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna."
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-teal-light/20 rounded-full flex items-center justify-center font-display text-teal text-xl">M</div>
@@ -442,7 +520,7 @@ export default function App() {
             >
               <Quote className="absolute top-6 right-6 text-amber opacity-10" size={64} />
               <p className="text-lg italic mb-6 text-text relative z-10">
-                "Świeże, doskonale otulone szczerością, przyprawione od serca i podane z uśmiechem przepyszne ryby."
+                "Doskonale otulone szczerością, przyprawione od serca i podane z uśmiechem przepyszne ryby."
               </p>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-amber-light/20 rounded-full flex items-center justify-center font-display text-amber text-xl">A</div>
@@ -480,7 +558,7 @@ export default function App() {
               </div>
               <p className="text-text-light/50 max-w-sm mb-8 leading-relaxed">
                 Tradycyjna smażalnia i wędzarnia ryb w Niechorzu. 
-                Pielęgnujemy smaki Bałtyku i dostarczamy to, co najlepsze 
+                Pielęgnujemy tradycyjne smaki i dostarczamy to, co najlepsze 
                 na Państwa stoły.
               </p>
               <div className="flex gap-4">
