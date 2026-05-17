@@ -80,7 +80,7 @@ const PRODUCTS = [
   {
     id: 9,
     title: "Nasza Wędzarnia",
-    desc: "Tradycyjne wędzenie na drewnie olchowym dla unikalnego aromatu",
+    desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
     image: "https://i.postimg.cc/W3VvskyF/699827953-1522689946183820-9209926211936458734-n.jpg"
   },
   {
@@ -111,7 +111,7 @@ const FULL_MENU = [
   {
     category: "RYBY Z PIECA",
     items: [
-      "Filet z łososia na maśle czoskowym z kompresji lub w sosie szpinakowym",
+      "Filet z łososia na maśle czoskowym lub w sosie szpinakowym",
       "Dorsz polędwica z czarniaka w sosie kurkowym, livorno lub szpinakowym",
       "Filet z halibuta w sosie kurkowym, livorno lub szpinakowym"
     ]
@@ -225,9 +225,10 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-mono text-amber uppercase tracking-[0.3em] mb-6"
+            className="font-mono text-amber tracking-[0.15em] mb-6"
           >
-            — SMAŻALNIA & WĘDZARNIA RYB —
+            <span className="uppercase font-bold tracking-[0.3em] block mb-2">SMAŻALNIA I WĘDZARNIA RYB</span>
+            <span className="text-brown italic normal-case tracking-normal opacity-80">Ryby u Ciszków tradycją od pokoleń...</span>
           </motion.p>
           
           <motion.h1 
@@ -334,9 +335,7 @@ export default function App() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute bottom-4 left-4 bg-amber text-[10px] font-mono px-3 py-1 text-white tracking-widest uppercase">
-                    Specjał Domu
-                  </div>
+
                 </div>
                 <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-[#FDF4E7]">
                   <div>
