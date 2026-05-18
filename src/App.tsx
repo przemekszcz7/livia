@@ -330,7 +330,7 @@ export default function App() {
                 <div className="relative h-64 sm:h-72 overflow-hidden">
                   <img 
                     src={item.image} 
-                    alt={item.title} 
+                    alt={`${item.title} - Smażalnia i Wędzarnia Ryb Livia Niechorze - wędzone ryby u Ciszków`} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
@@ -543,6 +543,12 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* Visually hidden SEO content */}
+      <div className="sr-only">
+        <h2>Smażalnia Niechorze - Najlepsze ryby nad morzem</h2>
+        <p>Szukasz najlepszej smażalni w Niechorzu? Livia to miejsce, gdzie tradycja spotyka się ze smakiem. Nasza wędzarnia Niechorze oferuje świeżo wędzone ryby na drewnie olchowym i bukowym. Ryby u Ciszków to gwarancja jakości i tradycji od pokoleń. W ofercie: wędzone ryby Niechorze, dorsz, halibut, łosoś, sandacz oraz nasze słynne wyroby własne jak paprykarz i sałatki śledziowe. Zapraszamy do Niechorza na ulicę Parkową 5.</p>
+      </div>
 
       {/* --- Footer --- */}
       <footer className="bg-bg-darker text-text-light pt-20 pb-10 relative overflow-hidden">
