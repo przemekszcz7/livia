@@ -322,7 +322,7 @@ export default function App() {
       </section>
 
       {/* --- Menu / Products --- */}
-      <section id="menu" className="relative py-24 bg-bg overflow-hidden">
+      <section id="menu" className="relative py-24 bg-bg overflow-hidden section-visible-optimize">
         <div className="max-w-7xl mx-auto px-4">
           <header className="mb-20 text-center">
             <p className="font-mono text-amber uppercase tracking-widest mb-4">— Z NASZEJ KUCHNI</p>
@@ -345,15 +345,17 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-all duration-500 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] will-change-[transform,opacity]"
+                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-[transform,box-shadow,opacity] duration-300 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] will-change-[transform,opacity]"
               >
                 <div className="relative h-64 sm:h-72 overflow-hidden">
                   <img 
                     src={item.image} 
                     alt={item.alt} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
                     referrerPolicy="no-referrer"
                     loading="lazy"
+                    width={380}
+                    height={288}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -412,7 +414,7 @@ export default function App() {
       </section>
 
       {/* --- Location --- */}
-      <section id="lokalizacja" className="relative py-24 bg-bg-dark text-text-light overflow-hidden">
+      <section id="lokalizacja" className="relative py-24 bg-bg-dark text-text-light overflow-hidden section-visible-optimize">
         <div className="absolute inset-0 texture-wood opacity-40 pointer-events-none" />
         <div className="absolute top-0 right-0 p-20 lantern-glow pointer-events-none" />
         
@@ -502,7 +504,7 @@ export default function App() {
       </section>
 
       {/* --- Reviews --- */}
-      <section id="opinie" className="py-24 bg-bg-section relative overflow-hidden">
+      <section id="opinie" className="py-24 bg-bg-section relative overflow-hidden section-visible-optimize">
         <div className="absolute left-10 top-1/2 -translate-y-1/2 opacity-10">
           <HookIcon />
         </div>
