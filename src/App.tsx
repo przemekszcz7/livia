@@ -137,7 +137,7 @@ const FULL_MENU = [
   {
     category: "RYBY WĘDZONE",
     items: [
-      "Węgorz", "Amur", "Łosoś filet", "Łosoś dzwonko", "Halibut", "Maślana", 
+      "Węgorz", "Antar", "Łosoś filet", "Łosoś dzwonko", "Halibut", "Maślana", 
       "Dorsz", "Trewal", "Karmazyn", "Pstrąg", "Gładzica (flądra)", "Morszczuk", 
       "Makrela", "Śledź", "Łosoś wędzony na zimno"
     ]
