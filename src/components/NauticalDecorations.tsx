@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { motion } from 'motion/react';
 
 export const FishIcon = () => (
   <svg viewBox="0 0 100 50" className="w-12 h-6 fill-none stroke-current stroke-1 opacity-40">
@@ -28,27 +27,23 @@ export const HookIcon = () => (
 );
 
 export const SmokeWisp = ({ delay = 0 }) => (
-  <motion.svg
+  <svg
     viewBox="0 0 20 60"
-    className="w-4 h-12 fill-none stroke-white/20 stroke-1 will-change-transform"
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: [0, 0.5, 0], y: -20, x: [0, 5, -5, 0] }}
-    transition={{ duration: 3, repeat: Infinity, delay }}
+    className="w-4 h-12 fill-none stroke-white/20 stroke-1 animate-smoke will-change-transform"
+    style={{ animationDelay: `${delay}s` }}
   >
     <path d="M10,60 C5,50 15,40 10,30 C5,20 15,10 10,0" />
-  </motion.svg>
+  </svg>
 );
 
 export const Seagull = ({ delay = 0 }) => (
-  <motion.svg
+  <svg
     viewBox="0 0 40 20"
-    className="w-8 h-4 fill-none stroke-current stroke-1 opacity-20 will-change-transform"
-    initial={{ x: -100, y: 20 }}
-    animate={{ x: 1200, y: [20, 10, 25, 15] }}
-    transition={{ duration: 25, repeat: Infinity, delay }}
+    className="w-8 h-4 fill-none stroke-current stroke-1 opacity-20 animate-seagull will-change-transform"
+    style={{ animationDelay: `${delay}s` }}
   >
     <path d="M5,15 C10,10 20,10 20,15 C20,10 30,10 35,15" />
-  </motion.svg>
+  </svg>
 );
 
 export const RopeDivider = () => (

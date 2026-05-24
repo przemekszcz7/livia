@@ -1,11 +1,15 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
+import compression from "compression";
 import { createServer as createViteServer } from "vite";
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  // Enable fast response compression (Gzip/Deflate) for all API endpoints & static files
+  app.use(compression());
 
   // Add a simple health check API endpoint
   app.get("/api/health", (req, res) => {

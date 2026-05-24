@@ -341,33 +341,34 @@ export default function App() {
             {PRODUCTS.map((item, idx) => (
               <motion.div 
                 key={item.id}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-[transform,box-shadow,opacity] duration-300 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] will-change-[transform,opacity]"
+                transition={{ delay: idx * 0.08, duration: 0.5 }}
+                className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] flex will-change-[transform,opacity]"
               >
-                <div className="relative h-64 sm:h-72 overflow-hidden">
-                  <img 
-                    src={item.image} 
-                    alt={item.alt} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                    width={380}
-                    height={288}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                </div>
-                <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-[#FDF4E7]">
-                  <div>
-                    <h3 className="text-2xl mb-3 text-brown font-display">{item.title}</h3>
-                    <p className="text-text-muted leading-relaxed font-body text-sm">{item.desc}</p>
+                <div className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl border-t-[3px] border-amber w-full transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-2xl will-change-transform">
+                  <div className="relative h-64 sm:h-72 overflow-hidden">
+                    <img 
+                      src={item.image} 
+                      alt={item.alt} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                      width={380}
+                      height={288}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="mt-6 pt-6 border-t border-brown/10 flex items-center justify-between">
-                    <span className="font-mono text-[10px] text-amber font-bold tracking-tighter">SMAŻALNIA LIVIA</span>
-                    <Fish size={16} className="text-teal opacity-30" />
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-[#FDF4E7]">
+                    <div>
+                      <h3 className="text-2xl mb-3 text-brown font-display">{item.title}</h3>
+                      <p className="text-text-muted leading-relaxed font-body text-sm">{item.desc}</p>
+                    </div>
+                    <div className="mt-6 pt-6 border-t border-brown/10 flex items-center justify-between">
+                      <span className="font-mono text-[10px] text-amber font-bold tracking-tighter">SMAŻALNIA LIVIA</span>
+                      <Fish size={16} className="text-teal opacity-30" />
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -642,15 +643,11 @@ export default function App() {
 
         {/* Waves Animation (Abstract) */}
         <div className="absolute bottom-0 left-0 w-full h-1 overflow-hidden opacity-20">
-          <motion.div 
-            animate={{ x: [-100, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="flex gap-1 will-change-transform"
-          >
+          <div className="flex gap-1 animate-waves will-change-transform">
             {[...Array(20)].map((_, i) => (
               <div key={i} className="w-20 h-full border-t border-amber" />
             ))}
-          </motion.div>
+          </div>
         </div>
       </footer>
 

@@ -86,4 +86,58 @@
     content-visibility: auto;
     contain-intrinsic-size: auto 600px;
   }
+
+  @keyframes fly-seagull {
+    0% {
+      transform: translate3d(-100px, 20px, 0);
+    }
+    25% {
+      transform: translate3d(225px, 10px, 0);
+    }
+    50% {
+      transform: translate3d(550px, 25px, 0);
+    }
+    75% {
+      transform: translate3d(875px, 15px, 0);
+    }
+    100% {
+      transform: translate3d(1200px, 20px, 0);
+    }
+  }
+
+  @keyframes rise-smoke {
+    0% {
+      transform: translate3d(0, 10px, 0);
+      opacity: 0;
+    }
+    50% {
+      transform: translate3d(5px, -5px, 0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate3d(-3px, -20px, 0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes wave-move {
+    0% {
+      transform: translate3d(-100px, 0, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .animate-seagull {
+    animation: fly-seagull 25s linear infinite;
+  }
+
+  .animate-smoke {
+    animation: rise-smoke 3s ease-in-out infinite;
+  }
+
+  .animate-waves {
+    animation: wave-move 4s linear infinite;
+  }
 }
