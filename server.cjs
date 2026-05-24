@@ -46,10 +46,8 @@ async function startServer() {
       setHeaders: (res, filePath) => {
         if (filePath.endsWith(".html")) {
           res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-        } else if (filePath.match(/\.(js|css|woff2?|eot|ttf|otf|png|jpe?g|gif|svg|ico|webp)$/i)) {
-          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         } else {
-          res.setHeader("Cache-Control", "public, max-age=86400, must-revalidate");
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         }
       }
     }));
