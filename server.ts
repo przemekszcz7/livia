@@ -29,12 +29,9 @@ async function startServer() {
         if (filePath.endsWith(".html")) {
           // HTML entry points should always revalidate to get latest builds immediately
           res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-        } else if (filePath.match(/\.(js|css|woff2?|eot|ttf|otf|png|jpe?g|gif|svg|ico|webp)$/i)) {
-          // Bundled static assets, fonts, and images (fingerprinted or immutable static files)
-          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         } else {
-          // All other static assets
-          res.setHeader("Cache-Control", "public, max-age=86400, must-revalidate");
+          // All other static assets (JS, CSS, images, fonts, sitemap, robots.txt) can be cached for 1 year
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         }
       }
     }));
