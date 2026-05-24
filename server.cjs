@@ -24,6 +24,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 // server.ts
 var import_express = __toESM(require("express"), 1);
 var import_path = __toESM(require("path"), 1);
+var import_fs = __toESM(require("fs"), 1);
 var import_vite = require("vite");
 async function startServer() {
   const app = (0, import_express.default)();
@@ -39,6 +40,22 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = import_path.default.join(process.cwd(), "dist");
+    const indexPath = import_path.default.join(distPath, "index.html");
+    let preloadHeaders = [];
+    try {
+      if (import_fs.default.existsSync(indexPath)) {
+        const htmlContent = import_fs.default.readFileSync(indexPath, "utf-8");
+        const jsMatches = [
+          ...htmlContent.matchAll(/src=["'](\/assets\/[^"']+\.js)["']/g),
+          ...htmlContent.matchAll(/href=["'](\/assets\/[^"']+\.js)["']/g)
+        ];
+        const preloads = Array.from(new Set(jsMatches.map((m) => m[1])));
+        preloadHeaders = preloads.filter((url) => url.endsWith(".js")).map((url) => `<${url}>; rel=modulepreload; as=script`);
+        console.log("Programmatic Link modulepreloads prepared:", preloadHeaders);
+      }
+    } catch (err) {
+      console.error("Failed to parse index.html for preloading:", err.message);
+    }
     app.use(import_express.default.static(distPath, {
       maxAge: "1y",
       // default fallback of 1 year for static assets
@@ -46,17 +63,22 @@ async function startServer() {
       setHeaders: (res, filePath) => {
         if (filePath.endsWith(".html")) {
           res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+          if (preloadHeaders.length > 0) {
+            res.setHeader("Link", preloadHeaders.join(", "));
+          }
         } else {
           res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
         }
       }
     }));
     app.get("*", (req, res) => {
-      res.sendFile(import_path.default.join(distPath, "index.html"), {
-        headers: {
-          "Cache-Control": "public, max-age=0, must-revalidate"
-        }
-      });
+      const headers = {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      };
+      if (preloadHeaders.length > 0) {
+        headers["Link"] = preloadHeaders.join(", ");
+      }
+      res.sendFile(indexPath, { headers });
     });
   }
   app.listen(PORT, "0.0.0.0", () => {
