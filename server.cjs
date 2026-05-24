@@ -25,10 +25,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var import_express = __toESM(require("express"), 1);
 var import_path = __toESM(require("path"), 1);
 var import_fs = __toESM(require("fs"), 1);
+var import_compression = __toESM(require("compression"), 1);
 var import_vite = require("vite");
 async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
+  app.use((0, import_compression.default)());
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
