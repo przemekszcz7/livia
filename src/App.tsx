@@ -33,73 +33,85 @@ const PRODUCTS = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "https://i.postimg.cc/7Lr9RYFC/682442135-122173731224871736-6776368048048448645-n.jpg"
+    image: "https://i.postimg.cc/7Lr9RYFC/682442135-122173731224871736-6776368048048448645-n.jpg",
+    alt: "domowy paprykarz rybny Niechorze wyroby własne u Ciszków"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "https://i.postimg.cc/ZnQFxT8M/679530491-122173546988871736-6257842709918702111-n.jpg"
+    image: "https://i.postimg.cc/ZnQFxT8M/679530491-122173546988871736-6257842709918702111-n.jpg",
+    alt: "filet z łososia z pieca w sosie szpinakowym restauracja rybna Niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "https://i.postimg.cc/3JDgHQCG/682022159-122173546814871736-3683840955976017963-n.jpg"
+    image: "https://i.postimg.cc/3JDgHQCG/682022159-122173546814871736-3683840955976017963-n.jpg",
+    alt: "gołąbki rybne w sosie pomidorowym tradycyjne smaki Niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "https://i.postimg.cc/RZLdjz4W/505921880-122115717314871736-7770390269341459292-n.jpg"
+    image: "https://i.postimg.cc/RZLdjz4W/505921880-122115717314871736-7770390269341459292-n.jpg",
+    alt: "smażony i pieczony halibut w sosie kurkowym smażalnia ryb Niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "https://i.postimg.cc/fRDj7gmb/505584261-122115716918871736-8185831084064450162-n.jpg"
+    image: "https://i.postimg.cc/fRDj7gmb/505584261-122115716918871736-8185831084064450162-n.jpg",
+    alt: "polędwica z dorsza w sosie livorno świeże ryby Niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
-    desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
-    image: "https://i.postimg.cc/B630JKzT/695348600-923868270701996-4656282206694215808-n.jpg"
+    desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
+    image: "https://i.postimg.cc/B630JKzT/695348600-923868270701996-4656282206694215808-n.jpg",
+    alt: "fishburger w chrupiącej bułce restauracja i smażalnia Niechorze"
   },
   {
     id: 7,
     title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
-    image: "https://i.postimg.cc/Ss4hmMPL/700396217-1533059238346518-8963335887176995326-n.jpg"
+    image: "https://i.postimg.cc/Ss4hmMPL/700396217-1533059238346518-8963335887176995326-n.jpg",
+    alt: "krem z pomidorów rozgrzewająca zupa rybna Niechorze"
   },
   {
     id: 8,
     title: "Witryna sklepowa",
     desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
-    image: "https://i.postimg.cc/LXSpm1Ws/701611589-1483948843187296-4365766202052196366-n.jpg"
+    image: "https://i.postimg.cc/LXSpm1Ws/701611589-1483948843187296-4365766202052196366-n.jpg",
+    alt: "świeże ryby i przetwory rybne w witrynie sklepowej wędzarni Niechorze"
   },
   {
     id: 9,
     title: "Nasza Wędzarnia",
     desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
-    image: "https://i.postimg.cc/W3VvskyF/699827953-1522689946183820-9209926211936458734-n.jpg"
+    image: "https://i.postimg.cc/W3VvskyF/699827953-1522689946183820-9209926211936458734-n.jpg",
+    alt: "tradycyjna wędzarnia ryb Niechorze wędzenie na drewnie olchowym i bukowym"
   },
   {
     id: 10,
     title: "Śledzie w różnych smakach",
     desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
-    image: "https://i.postimg.cc/ydKH7ZGJ/696496514-998136589395264-3632873255766360899-n.jpg"
+    image: "https://i.postimg.cc/ydKH7ZGJ/696496514-998136589395264-3632873255766360899-n.jpg",
+    alt: "domowe śledzie w marynacie sałatki śledziowe u Ciszków Niechorze"
   },
   {
     id: 11,
     title: "Smażone ryby",
     desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
-    image: "https://i.postimg.cc/ZRmSJdQy/695144514-1537371941336070-595221759149372261-n.jpg"
+    image: "https://i.postimg.cc/ZRmSJdQy/695144514-1537371941336070-595221759149372261-n.jpg",
+    alt: "chrupiąca smażona flądra i inne świeże ryby smażalnia Niechorze"
   },
   {
     id: 12,
     title: "Smażone ryby",
     desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
-    image: "https://i.postimg.cc/qRrTp3FN/696350736-952242117653610-8205760944439390768-n.jpg"
+    image: "https://i.postimg.cc/qRrTp3FN/696350736-952242117653610-8205760944439390768-n.jpg",
+    alt: "złocisty dorsz smażony w głębokim tłuszczu ryby Niechorze"
   }
 ];
 
@@ -150,8 +162,8 @@ export default function App() {
   return (
     <div className="min-h-screen selection:bg-amber/30 selection:text-brown">
       {/* --- Navigation --- */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-bg/90 backdrop-blur-md border-b-2 border-brown-light/10">
-        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+      <header className="fixed top-0 left-0 w-full z-50 bg-bg/90 backdrop-blur-md border-b-2 border-brown-light/10">
+        <nav className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between" aria-label="Nawigacja główna">
           <div className="flex items-center gap-3">
             <Fish className="text-amber" size={28} />
             <span className="font-display text-2xl font-bold tracking-tight text-brown">Livia</span>
@@ -159,10 +171,10 @@ export default function App() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 font-mono text-sm uppercase tracking-widest text-text-muted">
-            <a href="#hero" className="hover:text-amber transition-colors">Start</a>
-            <a href="#menu" className="hover:text-amber transition-colors">Nasze Ryby</a>
-            <a href="#lokalizacja" className="hover:text-amber transition-colors">Dojazd</a>
-            <a href="#opinie" className="hover:text-amber transition-colors">Goście</a>
+            <a href="#hero" title="Smażalnia ryb Niechorze - Livia" className="hover:text-amber transition-colors">Start</a>
+            <a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" className="hover:text-amber transition-colors">Nasze Ryby</a>
+            <a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" className="hover:text-amber transition-colors">Dojazd</a>
+            <a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" className="hover:text-amber transition-colors">Goście</a>
           </div>
 
           <div className="flex items-center gap-4">
@@ -172,18 +184,22 @@ export default function App() {
               rel="noopener noreferrer"
               className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-soft"
               id="fb-nav-link"
+              title="Odwiedź Livia Niechorze na Facebooku"
+              aria-label="Profil Livia Smażalnia i Wędzarnia Ryb na Facebooku"
             >
               <Facebook size={20} />
             </a>
             <button 
+              id="open-menu-btn"
               className="md:hidden p-2 text-brown"
               onClick={() => setMobileMenuOpen(true)}
+              aria-label="Otwórz menu nawigacji"
             >
               <MenuIcon />
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -192,26 +208,29 @@ export default function App() {
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            className="fixed inset-0 z-[60] bg-bg-dark text-text-light flex flex-col items-center justify-center p-8"
+            className="fixed inset-0 z-[60] bg-bg-dark text-text-light flex flex-col items-center justify-center p-8 will-change-transform"
           >
             <button 
+              id="close-menu-btn"
               className="absolute top-8 right-8 p-2 text-text-light"
               onClick={() => setMobileMenuOpen(false)}
+              aria-label="Zamknij menu nawigacji"
             >
               <X size={32} />
             </button>
             <div className="flex flex-col items-center gap-8 font-display text-4xl">
-              <a href="#hero" onClick={() => setMobileMenuOpen(false)}>Start</a>
-              <a href="#menu" onClick={() => setMobileMenuOpen(false)}>Nasze Ryby</a>
-              <a href="#lokalizacja" onClick={() => setMobileMenuOpen(false)}>Lokalizacja</a>
-              <a href="#opinie" onClick={() => setMobileMenuOpen(false)}>Opinie</a>
+              <a href="#hero" title="Smażalnia ryb Niechorze - Livia" onClick={() => setMobileMenuOpen(false)}>Start</a>
+              <a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" onClick={() => setMobileMenuOpen(false)}>Nasze Ryby</a>
+              <a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" onClick={() => setMobileMenuOpen(false)}>Lokalizacja</a>
+              <a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" onClick={() => setMobileMenuOpen(false)}>Opinie</a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* --- Hero Section --- */}
-      <section id="hero" className="relative h-screen flex flex-col items-center justify-center overflow-hidden px-4">
+      <main id="main-content" role="main">
+        {/* --- Hero Section --- */}
+        <section id="hero" className="relative h-screen flex flex-col items-center justify-center overflow-hidden px-4">
         {/* Background Textures */}
         <div className="absolute inset-0 bg-bg-section texture-net pointer-events-none" />
         
@@ -225,7 +244,7 @@ export default function App() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="font-mono text-amber tracking-[0.15em] mb-6"
+            className="font-mono text-amber tracking-[0.15em] mb-6 will-change-[transform,opacity]"
           >
             <span className="uppercase font-bold tracking-[0.3em] block mb-2">SMAŻALNIA I WĘDZARNIA RYB</span>
             <span className="text-brown italic normal-case tracking-normal opacity-80">Ryby u Ciszków tradycją od pokoleń...</span>
@@ -235,7 +254,7 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, type: "spring" }}
-            className="text-[clamp(2.5rem,8vw,7rem)] leading-none font-display mb-8 text-bg-dark"
+            className="text-[clamp(2.5rem,8vw,7rem)] leading-none font-display mb-8 text-bg-dark will-change-[transform,opacity]"
           >
             Livia
           </motion.h1>
@@ -244,7 +263,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12"
+            className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 will-change-opacity"
           >
             <div className="flex items-center gap-2 font-mono text-text-muted">
               <MapPin size={18} className="text-amber" />
@@ -261,18 +280,19 @@ export default function App() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="flex flex-wrap justify-center gap-4"
+            className="flex flex-wrap justify-center gap-4 will-change-[transform,opacity]"
           >
-            <a href="#menu" className="px-8 py-4 bg-brown text-text-light font-display text-lg rounded-sm hover:bg-brown-light transition-soft shadow-xl">
-              Zobacz naszą kartę
+            <a href="#menu" title="Menu smażalni ryb Niechorze - karta dań" className="px-8 py-4 bg-brown text-text-light font-display text-lg rounded-sm hover:bg-brown-light transition-soft shadow-xl">
+              Zobacz menu smażalni
             </a>
             <a 
               href="https://www.google.com/maps/dir//Parkowa+5,+72-350+Niechorze" 
               target="_blank" 
               rel="noopener noreferrer"
+              title="Znajdź nas w Niechorzu - nawigacja Google Maps"
               className="px-8 py-4 border-2 border-brown text-brown font-display text-lg rounded-sm hover:bg-brown hover:text-text-light transition-soft"
             >
-              Wyznacz trasę
+              Znajdź nas w Niechorzu
             </a>
           </motion.div>
         </div>
@@ -291,7 +311,7 @@ export default function App() {
           initial={{ opacity: 0, rotate: 15, scale: 0 }}
           animate={{ opacity: 1, rotate: -8, scale: 1 }}
           transition={{ delay: 1.2, type: "spring" }}
-          className="absolute top-24 right-4 md:top-1/4 md:right-[15%] stamp scale-[0.65] md:scale-100 origin-top-right z-10"
+          className="absolute top-24 right-4 md:top-1/4 md:right-[15%] stamp scale-[0.65] md:scale-100 origin-top-right z-10 will-change-[transform,opacity]"
         >
           ŚWIEŻO WĘDZONE
         </motion.div>
@@ -325,14 +345,15 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-all duration-500 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px]"
+                className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl transition-all duration-500 hover:-translate-y-2 border-t-[3px] border-amber w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] will-change-[transform,opacity]"
               >
                 <div className="relative h-64 sm:h-72 overflow-hidden">
                   <img 
                     src={item.image} 
-                    alt={`${item.title} - Smażalnia i Wędzarnia Ryb Livia Niechorze - wędzone ryby u Ciszków`} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    alt={item.alt} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 will-change-transform"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -401,13 +422,13 @@ export default function App() {
               <p className="font-mono text-amber-light uppercase tracking-widest mb-4">— GDZIE NAS ZNALEŹĆ</p>
               <h2 className="text-5xl mb-8 text-white">W samym sercu Niechorza</h2>
               
-              <div className="space-y-8 mb-12">
+              <address className="not-italic space-y-8 mb-12">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-brown rounded-full flex items-center justify-center shrink-0">
                     <MapPin className="text-amber" />
                   </div>
                   <div>
-                    <h4 className="font-display text-xl mb-1">Adres:</h4>
+                    <h3 className="font-display text-xl mb-1">Adres:</h3>
                     <p className="text-text-light/70">Ul. Parkowa 5, 72-350 Niechorze</p>
                   </div>
                 </div>
@@ -417,8 +438,10 @@ export default function App() {
                     <Phone className="text-amber" />
                   </div>
                   <div>
-                    <h4 className="font-display text-xl mb-1">Telefon:</h4>
-                    <p className="text-text-light/70">663 854 283</p>
+                    <h3 className="font-display text-xl mb-1">Telefon:</h3>
+                    <p className="text-text-light/70">
+                      <a href="tel:663854283" title="Zadzwoń do wędzarni ryb i smażalni" className="hover:text-amber transition-colors font-bold">663 854 283</a>
+                    </p>
                   </div>
                 </div>
 
@@ -427,16 +450,16 @@ export default function App() {
                     <Clock className="text-amber" />
                   </div>
                   <div>
-                    <h4 className="font-display text-xl mb-1">Czynne:</h4>
-                    <p className="text-text-light/70 text-lg">Codziennie od 9:00</p>
+                    <h3 className="font-display text-xl mb-1">Czynne:</h3>
+                    <p className="text-text-light/70 text-lg">Codziennie od <time dateTime="09:00">9:00</time></p>
                     <div className="mt-4 p-4 bg-amber/10 border-l-2 border-amber rounded-r-md">
                       <p className="text-amber-light font-display text-lg mb-1">Gorąca ryba:</p>
-                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider">Codziennie: 14:00</p>
-                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider mt-1">W ścisłym sezonie: 14:00 i 17:00</p>
+                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider">Codziennie: <time dateTime="14:00">14:00</time></p>
+                      <p className="text-text-light/80 text-sm font-mono uppercase tracking-wider mt-1">W ścisłym sezonie: <time dateTime="14:00">14:00</time> i <time dateTime="17:00">17:00</time></p>
                     </div>
                   </div>
                 </div>
-              </div>
+              </address>
 
               <div className="flex gap-4">
                 <a 
@@ -444,6 +467,7 @@ export default function App() {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-6 py-3 bg-blue-600 rounded-sm hover:bg-blue-700 transition-colors font-mono text-sm uppercase tracking-wider"
+                  title="Zobacz profil wędzarni i smażalni ryb Livia Niechorze na Facebooku"
                 >
                   <Facebook size={20} />
                   Facebook
@@ -453,9 +477,10 @@ export default function App() {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-6 py-3 border border-white/20 rounded-sm hover:bg-white/10 transition-colors font-mono text-sm uppercase tracking-wider"
+                  title="Wyznacz trasę do naszej smażalni i wędzarni ryb w Niechorzu"
                 >
                   <Navigation size={20} />
-                  Nawiguj
+                  Wyznacz trasę
                 </a>
               </div>
             </div>
@@ -505,7 +530,7 @@ export default function App() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-teal-light/20 rounded-full flex items-center justify-center font-display text-teal text-xl">M</div>
                 <div>
-                  <h5 className="font-bold">Marek</h5>
+                  <h3 className="font-bold">Marek</h3>
                   <p className="text-xs font-mono text-text-muted">Opinia z Facebook</p>
                 </div>
               </div>
@@ -524,7 +549,7 @@ export default function App() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-amber-light/20 rounded-full flex items-center justify-center font-display text-amber text-xl">A</div>
                 <div>
-                  <h5 className="font-bold">Anna Z.</h5>
+                  <h3 className="font-bold">Anna Z.</h3>
                   <p className="text-xs font-mono text-text-muted">Opinia z Facebook</p>
                 </div>
               </div>
@@ -549,6 +574,7 @@ export default function App() {
         <h2>Smażalnia Niechorze - Najlepsze ryby nad morzem</h2>
         <p>Szukasz najlepszej smażalni w Niechorzu? Livia to miejsce, gdzie tradycja spotyka się ze smakiem. Nasza wędzarnia Niechorze oferuje świeżo wędzone ryby na drewnie olchowym i bukowym. Ryby u Ciszków to gwarancja jakości i tradycji od pokoleń. W ofercie: wędzone ryby Niechorze, dorsz, halibut, łosoś, sandacz oraz nasze słynne wyroby własne jak paprykarz i sałatki śledziowe. Zapraszamy do Niechorza na ulicę Parkową 5.</p>
       </div>
+      </main>
 
       {/* --- Footer --- */}
       <footer className="bg-bg-darker text-text-light pt-20 pb-10 relative overflow-hidden">
@@ -567,33 +593,42 @@ export default function App() {
                 na Państwa stoły.
               </p>
               <div className="flex gap-4">
-                <a href="https://www.facebook.com/profile.php?id=61576152080532" className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                <a 
+                  href="https://www.facebook.com/profile.php?id=61576152080532" 
+                  className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors"
+                  title="Odwiedź fanpage Livia Smażalnia i Wędzarnia Ryb na Facebooku"
+                  aria-label="Profil Livia Smażalnia i Wędzarnia Ryb na Facebooku"
+                >
                   <Facebook size={20} />
                 </a>
               </div>
             </div>
 
             <div>
-              <h4 className="font-mono text-amber-light uppercase tracking-widest text-sm mb-6">Nawigacja</h4>
+              <h3 className="font-mono text-amber-light uppercase tracking-widest text-sm mb-6">Nawigacja</h3>
               <ul className="space-y-3 text-text-light/60">
-                <li><a href="#hero" className="hover:text-amber transition-colors">Strona Główna</a></li>
-                <li><a href="#menu" className="hover:text-amber transition-colors">Nasza Oferta</a></li>
-                <li><a href="#lokalizacja" className="hover:text-amber transition-colors">Jak dojechać</a></li>
-                <li><a href="#opinie" className="hover:text-amber transition-colors">Wasze Opinie</a></li>
+                <li><a href="#hero" title="Smażalnia ryb Niechorze - Livia" className="hover:text-amber transition-colors">Strona Główna</a></li>
+                <li><a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" className="hover:text-amber transition-colors">Nasza Oferta</a></li>
+                <li><a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" className="hover:text-amber transition-colors">Jak dojechać</a></li>
+                <li><a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" className="hover:text-amber transition-colors">Wasze Opinie</a></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-mono text-amber-light uppercase tracking-widest text-sm mb-6">Kontakt</h4>
-              <p className="text-text-light/60 mb-2">Ul. Parkowa 5</p>
-              <p className="text-text-light/60 mb-2">72-350 Niechorze</p>
-              <p className="text-white font-bold mt-4">663 854 283</p>
+              <h3 className="font-mono text-amber-light uppercase tracking-widest text-sm mb-6">Kontakt</h3>
+              <address className="not-italic text-text-light/60 space-y-2">
+                <p>Ul. Parkowa 5</p>
+                <p>72-350 Niechorze</p>
+                <p className="text-white font-bold pt-4">
+                  <a href="tel:663854283" title="Zadzwoń do wędzarni ryb i smażalni" className="hover:text-amber transition-colors font-bold">663 854 283</a>
+                </p>
+              </address>
             </div>
           </div>
 
           <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-xs text-text-light/30 font-mono">
-              © {new Date().getFullYear()} LIVIA NIECHORZE. WSZYSTKIE PRAWA ZASTRZEŻONE.
+              © {new Date().getFullYear()} Livia — Smażalnia i Wędzarnia Ryb Niechorze, ul. Parkowa 5, zachodniopomorskie. Wszystkie prawa zastrzeżone.
             </p>
             <div className="flex items-center gap-4 opacity-30">
               <AnchorIcon />
@@ -608,7 +643,7 @@ export default function App() {
           <motion.div 
             animate={{ x: [-100, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            className="flex gap-1"
+            className="flex gap-1 will-change-transform"
           >
             {[...Array(20)].map((_, i) => (
               <div key={i} className="w-20 h-full border-t border-amber" />
@@ -622,6 +657,7 @@ export default function App() {
         <a 
           href="tel:663854283"
           className="w-16 h-16 bg-amber text-white rounded-full shadow-2xl flex items-center justify-center animate-pulse"
+          aria-label="Połączenie telefoniczne ze Smażalnią Livia - zadzwoń pod numer 663 854 283"
         >
           <Phone />
         </a>

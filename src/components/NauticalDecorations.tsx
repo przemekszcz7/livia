@@ -30,7 +30,7 @@ export const HookIcon = () => (
 export const SmokeWisp = ({ delay = 0 }) => (
   <motion.svg
     viewBox="0 0 20 60"
-    className="w-4 h-12 fill-none stroke-white/20 stroke-1"
+    className="w-4 h-12 fill-none stroke-white/20 stroke-1 will-change-transform"
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: [0, 0.5, 0], y: -20, x: [0, 5, -5, 0] }}
     transition={{ duration: 3, repeat: Infinity, delay }}
@@ -42,7 +42,7 @@ export const SmokeWisp = ({ delay = 0 }) => (
 export const Seagull = ({ delay = 0 }) => (
   <motion.svg
     viewBox="0 0 40 20"
-    className="w-8 h-4 fill-none stroke-current stroke-1 opacity-20"
+    className="w-8 h-4 fill-none stroke-current stroke-1 opacity-20 will-change-transform"
     initial={{ x: -100, y: 20 }}
     animate={{ x: 1200, y: [20, 10, 25, 15] }}
     transition={{ duration: 25, repeat: Infinity, delay }}
