@@ -65,6 +65,16 @@ if (fs.existsSync(indexPath)) {
   } else {
     console.log('No CSS files found or matches resolved to inline.');
   }
+
+  // Create 404.html duplicate as a fallback routing mechanism for GitHub Pages/SPA
+  const fallbackPath = path.join(distPath, '404.html');
+  try {
+    const finalHtml = fs.readFileSync(indexPath, 'utf-8');
+    fs.writeFileSync(fallbackPath, finalHtml, 'utf-8');
+    console.log('Successfully copied dist/index.html to dist/404.html for SPA routing!');
+  } catch (err) {
+    console.error(`Failed to create dist/404.html Fallback: ${err.message}`);
+  }
 } else {
   console.error(`Error: Header inliner could not find index.html at ${indexPath}`);
 }
