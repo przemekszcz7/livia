@@ -3,8 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import BlogPage from './components/BlogPage';
+import MenuPage from './components/MenuPage';
 import { 
   Facebook, 
   MapPin, 
@@ -16,7 +18,9 @@ import {
   Fish, 
   Waves,
   Navigation,
-  Quote
+  Quote,
+  ChevronDown,
+  HelpCircle
 } from 'lucide-react';
 import { 
   FishIcon, 
@@ -33,84 +37,84 @@ const PRODUCTS = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "https://i.postimg.cc/7Lr9RYFC/682442135-122173731224871736-6776368048048448645-n.jpg",
+    image: "/images/paprykarz.jpg",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "https://i.postimg.cc/ZnQFxT8M/679530491-122173546988871736-6257842709918702111-n.jpg",
+    image: "/images/losos_z_pieca.jpg",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "https://i.postimg.cc/3JDgHQCG/682022159-122173546814871736-3683840955976017963-n.jpg",
+    image: "/images/golabki_rybne.jpg",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "https://i.postimg.cc/RZLdjz4W/505921880-122115717314871736-7770390269341459292-n.jpg",
+    image: "/images/halibut.jpg",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "https://i.postimg.cc/fRDj7gmb/505584261-122115716918871736-8185831084064450162-n.jpg",
+    image: "/images/dorsz_livorno.jpg",
     alt: "świeży dorsz w sosie livorno - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
     desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
-    image: "https://i.postimg.cc/B630JKzT/695348600-923868270701996-4656282206694215808-n.jpg",
+    image: "/images/fishburger.jpg",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 7,
     title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
-    image: "https://i.postimg.cc/Ss4hmMPL/700396217-1533059238346518-8963335887176995326-n.jpg",
+    image: "/images/krem_z_pomidorow.jpg",
     alt: "rozgrzewający krem z pomidorów z rybą - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 8,
     title: "Witryna sklepowa",
     desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
-    image: "https://i.postimg.cc/LXSpm1Ws/701611589-1483948843187296-4365766202052196366-n.jpg",
+    image: "/images/witryna_sklepowa.jpg",
     alt: "świeże i wędzone ryby w gablocie - wędzarnia niechorze, smażalnia niechorze, ryby niechorze"
   },
   {
     id: 9,
     title: "Nasza Wędzarnia",
     desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
-    image: "https://i.postimg.cc/W3VvskyF/699827953-1522689946183820-9209926211936458734-n.jpg",
+    image: "/images/nasza_wedzarnia.jpg",
     alt: "tradycyjna rzemieślnicza wędzarnia u Ciszków - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 10,
     title: "Śledzie w różnych smakach",
     desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
-    image: "https://i.postimg.cc/ydKH7ZGJ/696496514-998136589395264-3632873255766360899-n.jpg",
+    image: "/images/domowe_sledzie.jpg",
     alt: "domowe marynowane śledzie - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 11,
     title: "Smażone ryby",
     desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
-    image: "https://i.postimg.cc/ZRmSJdQy/695144514-1537371941336070-595221759149372261-n.jpg",
+    image: "/images/smazona_fladra.jpg",
     alt: "chrupiąca smażona flądra u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 12,
     title: "Smażone ryby",
     desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
-    image: "https://i.postimg.cc/qRrTp3FN/696350736-952242117653610-8205760944439390768-n.jpg",
+    image: "/images/smazony_dorsz.jpg",
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
@@ -156,25 +160,186 @@ const FULL_MENU = [
   }
 ];
 
+const FAQ_ITEMS = [
+  {
+    question: "Czym różni się wędzenie na zimno od wędzenia na gorąco?",
+    answer: "Wędzenie na gorąco odbywa się w temperaturze 60–90°C — ryba jest po nim w pełni ugotowana, soczysta i gotowa do jedzenia od razu. Wędzenie na zimno to proces w temperaturze poniżej 30°C, trwający znacznie dłużej — efektem jest sprężysta, intensywnie aromatyczna ryba o dłuższym terminie przydatności. Oba rodzaje wędzonek znajdziesz w naszej ofercie."
+  },
+  {
+    question: "Jak długo można przechowywać wędzoną rybę kupioną na wynos?",
+    answer: "Wędzona ryba kupiona na wynos powinna być przechowywana w lodówce i spożyta w ciągu 2–3 dni. Najlepiej smakuje w dniu zakupu — wtedy aromat dymu jest najbardziej intensywny."
+  },
+  {
+    question: "Jak dojechać do Niechorza samochodem?",
+    answer: "Niechorze leży w województwie zachodniopomorskim, w gminie Rewal. Jadąc od strony Szczecina, należy kierować się na Rewal i dalej drogą wojewódzką wzdłuż wybrzeża. Od Kołobrzegu trasa prowadzi przez Trzęsacz i Rewal. W sezonie letnim warto przyjechać rano — parkowanie w centrum miejscowości bywa trudne w godzinach popołudniowych."
+  },
+  {
+    question: "Czy oferujecie zupy rybne?",
+    answer: "Tak, zupy rybne to stały element naszego menu. Gorąca zupa rybna to jeden z obowiązkowych punktów każdej wizyty nad morzem — szczególnie w chłodniejsze dni wczesnej wiosny i późnego lata."
+  },
+  {
+    question: "Czy wędzona ryba jest zdrowa?",
+    answer: "Tak, spożywana z umiarem wędzona ryba jest wartościowym elementem diety. Dostarcza kwasów omega-3, witaminy D, witaminy B12 i pełnowartościowego białka. Warto jednak pamiętać, że wędzenie wiąże się z pewną ilością soli oraz substancji powstających podczas spalania drewna — jak każdy produkt, najlepiej jeść ją jako część zróżnicowanej diety."
+  },
+  {
+    question: "Gdzie mogę zostawić opinię o Waszej smażalni?",
+    answer: "Najcenniejsze dla nas są opinie w Google oraz na Facebooku. Jeśli byłeś u nas i dobrze się bawiłeś — zostaw gwiazdki i krótki komentarz. To dla nas ogromne wsparcie i pomoc dla innych turystów planujących wizytę w Niechorzu."
+  },
+  {
+    question: "Co zrobić, jeśli mam zastrzeżenia do jakości lub obsługi?",
+    answer: "Zależy nam na każdym gościu. Jeśli coś nie spełniło Twoich oczekiwań, powiedz nam o tym bezpośrednio na miejscu lub napisz do nas na Facebooku. Traktujemy każdą uwagę poważnie."
+  }
+];
+
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState<'home' | 'blog' | 'menu'>('home');
+  const [selectedArticleSlug, setSelectedArticleSlug] = useState<string | undefined>(undefined);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  // Sync hash routing
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#/blog/')) {
+        const slug = hash.replace('#/blog/', '');
+        setCurrentPage('blog');
+        setSelectedArticleSlug(slug);
+      } else if (hash === '#/blog') {
+        setCurrentPage('blog');
+        setSelectedArticleSlug(undefined);
+      } else if (hash === '#/menu') {
+        setCurrentPage('menu');
+        setSelectedArticleSlug(undefined);
+      } else {
+        // If it's a standard home anchor, keep 'home'
+        if (hash === '' || hash === '#hero' || hash === '#nasze-ryby' || hash === '#lokalizacja' || hash === '#opinie' || hash === '#faq') {
+          setCurrentPage('home');
+          setSelectedArticleSlug(undefined);
+          
+          if (hash !== '' && hash !== '#hero') {
+            setTimeout(() => {
+              const element = document.querySelector(hash);
+              if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 100);
+          }
+        }
+      }
+    };
+
+    // Run on mount
+    handleHashChange();
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Update hash when React state shifts
+  useEffect(() => {
+    if (currentPage === 'blog') {
+      if (selectedArticleSlug) {
+        if (window.location.hash !== `#/blog/${selectedArticleSlug}`) {
+          window.location.hash = `#/blog/${selectedArticleSlug}`;
+        }
+      } else {
+        if (window.location.hash !== '#/blog') {
+          window.location.hash = `#/blog`;
+        }
+      }
+    } else if (currentPage === 'menu') {
+      if (window.location.hash !== '#/menu') {
+        window.location.hash = '#/menu';
+      }
+    } else {
+      // If returning home, clean blog/menu routing hashes
+      if (window.location.hash.startsWith('#/blog') || window.location.hash === '#/menu') {
+        window.location.hash = '';
+      }
+    }
+  }, [currentPage, selectedArticleSlug]);
 
   return (
-    <div className="min-h-screen selection:bg-amber/30 selection:text-brown">
+    <div className="min-h-screen selection:bg-amber/30 selection:text-brown bg-bg">
       {/* --- Navigation --- */}
       <header className="fixed top-0 left-0 w-full z-50 bg-bg/90 backdrop-blur-md border-b-2 border-brown-light/10">
         <nav className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between" aria-label="Nawigacja główna">
-          <div className="flex items-center gap-3">
-            <Fish className="text-amber" size={28} />
+          <button 
+            type="button"
+            onClick={() => { 
+              setCurrentPage('home'); 
+              setSelectedArticleSlug(undefined); 
+              window.location.hash = '';
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} 
+            className="flex items-center gap-3 cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-amber/45 rounded-md px-2 py-1"
+          >
+            <Fish className="text-amber animate-pulse" size={28} />
             <span className="font-display text-2xl font-bold tracking-tight text-brown">Livia</span>
-          </div>
+          </button>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 font-mono text-sm uppercase tracking-widest text-text-muted">
-            <a href="#hero" title="Smażalnia ryb Niechorze - Livia" className="hover:text-amber transition-colors">Start</a>
-            <a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" className="hover:text-amber transition-colors">Nasze Ryby</a>
-            <a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" className="hover:text-amber transition-colors">Dojazd</a>
-            <a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" className="hover:text-amber transition-colors">Goście</a>
+            <button 
+              type="button"
+              onClick={() => { 
+                if (currentPage !== 'home') {
+                  setCurrentPage('home');
+                  setSelectedArticleSlug(undefined);
+                }
+                window.location.hash = '#nasze-ryby';
+              }} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#nasze-ryby' ? 'text-amber' : 'text-text-muted'}`}
+            >
+              Nasze Ryby
+            </button>
+            <button 
+              type="button"
+              onClick={() => { 
+                setCurrentPage('menu');
+                setSelectedArticleSlug(undefined);
+              }} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentPage === 'menu' ? 'text-amber font-extrabold border-b-2 border-amber' : 'text-text-muted'}`}
+            >
+              Pełne Menu
+            </button>
+            <button 
+              type="button"
+              onClick={() => { 
+                if (currentPage !== 'home') {
+                  setCurrentPage('home');
+                  setSelectedArticleSlug(undefined);
+                }
+                window.location.hash = '#lokalizacja';
+              }} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#lokalizacja' ? 'text-amber' : 'text-text-muted'}`}
+            >
+              Dojazd
+            </button>
+            <button 
+              type="button"
+              onClick={() => { 
+                if (currentPage !== 'home') {
+                  setCurrentPage('home');
+                  setSelectedArticleSlug(undefined);
+                }
+                window.location.hash = '#opinie';
+              }} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#opinie' ? 'text-amber' : 'text-text-muted'}`}
+            >
+              Goście
+            </button>
+            <button 
+              type="button"
+              onClick={() => { 
+                setCurrentPage('blog'); 
+                setSelectedArticleSlug(undefined); 
+              }} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentPage === 'blog' ? 'text-amber font-extrabold border-b-2 border-amber' : 'text-text-muted'}`}
+            >
+              Blog
+            </button>
           </div>
 
           <div className="flex items-center gap-4">
@@ -182,7 +347,7 @@ export default function App() {
               href="https://www.facebook.com/profile.php?id=61576152080532" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-soft"
+              className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-soft shadow-sm"
               id="fb-nav-link"
               title="Odwiedź Livia Niechorze na Facebooku"
               aria-label="Profil Livia Smażalnia i Wędzarnia Ryb na Facebooku"
@@ -191,6 +356,7 @@ export default function App() {
             </a>
             <button 
               id="open-menu-btn"
+              type="button"
               className="md:hidden p-2 text-brown"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Otwórz menu nawigacji"
@@ -212,6 +378,7 @@ export default function App() {
           >
             <button 
               id="close-menu-btn"
+              type="button"
               className="absolute top-8 right-8 p-2 text-text-light"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Zamknij menu nawigacji"
@@ -219,17 +386,93 @@ export default function App() {
               <X size={32} />
             </button>
             <div className="flex flex-col items-center gap-8 font-display text-4xl">
-              <a href="#hero" title="Smażalnia ryb Niechorze - Livia" onClick={() => setMobileMenuOpen(false)}>Start</a>
-              <a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" onClick={() => setMobileMenuOpen(false)}>Nasze Ryby</a>
-              <a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" onClick={() => setMobileMenuOpen(false)}>Lokalizacja</a>
-              <a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" onClick={() => setMobileMenuOpen(false)}>Opinie</a>
+              <button 
+                type="button"
+                onClick={() => { 
+                  setCurrentPage('home'); 
+                  setSelectedArticleSlug(undefined);
+                  setMobileMenuOpen(false); 
+                  window.location.hash = '#nasze-ryby';
+                }}
+                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#nasze-ryby' ? 'text-amber' : 'text-text-light'}`}
+              >
+                Nasze Ryby
+              </button>
+              <button 
+                type="button"
+                onClick={() => { 
+                  setCurrentPage('menu'); 
+                  setSelectedArticleSlug(undefined);
+                  setMobileMenuOpen(false); 
+                }}
+                className={`font-display hover:text-amber transition-colors ${currentPage === 'menu' ? 'text-amber' : 'text-text-light'}`}
+              >
+                Pełne Menu
+              </button>
+              <button 
+                type="button"
+                onClick={() => { 
+                  setCurrentPage('home'); 
+                  setSelectedArticleSlug(undefined);
+                  setMobileMenuOpen(false); 
+                  window.location.hash = '#lokalizacja';
+                }}
+                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#lokalizacja' ? 'text-amber' : 'text-text-light'}`}
+              >
+                Lokalizacja
+              </button>
+              <button 
+                type="button"
+                onClick={() => { 
+                  setCurrentPage('home'); 
+                  setSelectedArticleSlug(undefined);
+                  setMobileMenuOpen(false); 
+                  window.location.hash = '#opinie';
+                }}
+                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#opinie' ? 'text-amber' : 'text-text-light'}`}
+              >
+                Opinie
+              </button>
+              <button 
+                type="button"
+                onClick={() => { 
+                  setCurrentPage('blog'); 
+                  setSelectedArticleSlug(undefined); 
+                  setMobileMenuOpen(false); 
+                }}
+                className={`font-display hover:text-amber transition-colors ${currentPage === 'blog' ? 'text-amber' : 'text-text-light'}`}
+              >
+                Blog
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       <main id="main-content" role="main">
-        {/* --- Hero Section --- */}
+        <h1 className="sr-only">Livia - Smażalnia Niechorze | Wędzarnia Niechorze | Ryby Niechorze</h1>
+        
+        {currentPage === 'blog' ? (
+          <BlogPage 
+            onBackToHome={() => {
+              setCurrentPage('home');
+              setSelectedArticleSlug(undefined);
+              window.location.hash = '';
+            }} 
+            selectedArticleSlug={selectedArticleSlug}
+            setSelectedArticleSlug={setSelectedArticleSlug}
+          />
+        ) : currentPage === 'menu' ? (
+          <MenuPage 
+            onBackToHome={() => {
+              setCurrentPage('home');
+              setSelectedArticleSlug(undefined);
+              window.location.hash = '';
+            }}
+          />
+        ) : (
+          <>
+            {/* --- Hero Section --- */}
         <section id="hero" className="relative h-screen flex flex-col items-center justify-center overflow-hidden px-4">
         {/* Background Textures */}
         <div className="absolute inset-0 bg-bg-section texture-net pointer-events-none" />
@@ -238,7 +481,7 @@ export default function App() {
         <Seagull delay={0} />
         <Seagull delay={10} />
         <Seagull delay={15} />
-
+ 
         <div className="relative z-10 text-center max-w-4xl">
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -250,14 +493,14 @@ export default function App() {
             <span className="text-brown italic normal-case tracking-normal opacity-80">Ryby u Ciszków tradycją od pokoleń...</span>
           </motion.p>
           
-          <motion.h1 
+          <motion.h2 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, type: "spring" }}
-            className="text-[clamp(2.5rem,8vw,7rem)] leading-none font-display mb-8 text-bg-dark will-change-[transform,opacity]"
+            className="text-[clamp(2.5rem,8vw,7rem)] leading-none font-display mb-8 text-bg-dark will-change-[transform,opacity] font-bold"
           >
             Livia
-          </motion.h1>
+          </motion.h2>
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -282,7 +525,7 @@ export default function App() {
             transition={{ delay: 0.8 }}
             className="flex flex-wrap justify-center gap-4 will-change-[transform,opacity]"
           >
-            <a href="#menu" title="Menu smażalni ryb Niechorze - karta dań" className="px-8 py-4 bg-brown text-text-light font-display text-lg rounded-sm hover:bg-brown-light transition-soft shadow-xl">
+            <a href="#/menu" title="Menu smażalni ryb Niechorze - karta dań" className="px-8 py-4 bg-brown text-text-light font-display text-lg rounded-sm hover:bg-brown-light transition-soft shadow-xl">
               Zobacz menu smażalni
             </a>
             <a 
@@ -321,15 +564,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* --- Menu / Products --- */}
-      <section id="menu" className="relative py-24 bg-bg overflow-hidden section-visible-optimize">
+      {/* --- Section: Nasze Ryby --- */}
+      <section id="nasze-ryby" className="relative py-24 bg-bg overflow-hidden section-visible-optimize">
         <div className="max-w-7xl mx-auto px-4">
           <header className="mb-20 text-center">
             <p className="font-mono text-amber uppercase tracking-widest mb-4">— Z NASZEJ KUCHNI</p>
             <h2 className="text-5xl md:text-6xl mb-6">Tradycja na Talerzu</h2>
             <div className="max-w-2xl mx-auto">
               <p className="text-text-muted text-lg italic">
-                Nasze ryby wędzimy tradycyjną metodą na drewnie olchowym i bukowym.
+                Nasze ryby wędzimy tradycyjną metodą na drewnie olchowym i bukowym. Poznaj nasze wyśmienite, rzemieślnicze wyroby własne.
               </p>
             </div>
             <div className="mt-8 flex justify-center opacity-30">
@@ -374,42 +617,24 @@ export default function App() {
               </motion.div>
             ))}
           </div>
-        </div>
 
-        {/* --- Detailed Text Menu --- */}
-        <div className="max-w-6xl mx-auto px-4 mt-20 md:mt-32">
-          <div className="bg-[#FAF7F2] border-2 border-brown/10 rounded-2xl p-8 md:p-16 shadow-inner relative">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-bg px-6 py-2 border-2 border-amber rounded-full">
-              <span className="font-mono text-sm tracking-[0.3em] text-brown uppercase font-bold whitespace-nowrap">Karta Dań</span>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20">
-              {FULL_MENU.map((section, sIdx) => (
-                <motion.div 
-                  key={sIdx}
-                  initial={{ opacity: 0, x: sIdx % 2 === 0 ? -20 : 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="h-[2px] flex-1 bg-amber/30" />
-                    <h3 className="font-display text-2xl md:text-3xl text-brown uppercase tracking-tight">{section.category}</h3>
-                    <div className="h-[2px] flex-1 bg-amber/30" />
-                  </div>
-                  <ul className="space-y-3">
-                    {section.items.map((item, iIdx) => (
-                      <li key={iIdx} className="flex items-baseline gap-4 group">
-                        <span className="text-text-muted font-body leading-relaxed group-hover:text-amber transition-colors">
-                          {item}
-                        </span>
-                        <div className="flex-1 border-b border-dotted border-brown/20" />
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
+          {/* --- Button: view full menu --- */}
+          <div className="mt-20 text-center relative z-10">
+            <button
+              type="button"
+              onClick={() => {
+                setCurrentPage('menu');
+                window.scrollTo({ top: 0 });
+              }}
+              className="inline-flex items-center gap-3 px-10 py-5 bg-brown text-text-light font-display text-xl rounded-sm hover:bg-brown-light transition-soft shadow-2xl hover:scale-105 active:scale-95 cursor-pointer border-2 border-amber/40 hover:border-amber focus:outline-none focus:ring-4 focus:ring-amber/40 font-semibold"
+              title="Wyświetl pełną kartę dań restauracji Livia"
+            >
+              <Fish size={24} className="text-amber animate-pulse" />
+              Zobacz pełne menu
+            </button>
+            <p className="text-text-muted text-xs font-mono tracking-wider uppercase mt-4 opacity-75">
+              Pełny asortyment: ryby smażone, z pieca, zupy i ryby wędzone
+            </p>
           </div>
         </div>
       </section>
@@ -572,11 +797,100 @@ export default function App() {
         </div>
       </section>
 
-      {/* Visually hidden SEO content */}
-      <div className="sr-only">
-        <h2>Smażalnia Niechorze - Najlepsze ryby nad morzem</h2>
-        <p>Szukasz najlepszej smażalni w Niechorzu? Livia to miejsce, gdzie tradycja spotyka się ze smakiem. Nasza wędzarnia Niechorze oferuje świeżo wędzone ryby na drewnie olchowym i bukowym. Ryby u Ciszków to gwarancja jakości i tradycji od pokoleń. W ofercie: wędzone ryby Niechorze, dorsz, halibut, łosoś, sandacz oraz nasze słynne wyroby własne jak paprykarz i sałatki śledziowe. Zapraszamy do Niechorza na ulicę Parkową 5.</p>
-      </div>
+      {/* --- FAQ Section --- */}
+      <section id="faq" className="py-24 bg-bg relative overflow-hidden section-visible-optimize">
+        <div className="absolute right-10 top-10 opacity-5 hidden lg:block transform -rotate-12 pointer-events-none">
+          <FishIcon />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <header className="mb-16 text-center">
+            <p className="font-mono text-amber uppercase tracking-widest mb-4">
+              — MASZ PYTANIA?
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-display font-medium text-brown mb-6">
+              Często Zadawane Pytania (FAQ)
+            </h2>
+            <div className="max-w-xl mx-auto">
+              <RopeDivider />
+              <p className="text-text-muted text-base mt-6 italic">
+                Przygotowaliśmy odpowiedzi na najczęściej zadawane pytania dotyczące naszej restauracji, wędzarni oraz dojazdu do Niechorza.
+              </p>
+            </div>
+          </header>
+
+          <div className="space-y-4">
+            {FAQ_ITEMS.map((item, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div 
+                  key={idx}
+                  className={`bg-white rounded-xl border border-brown/10 overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md ${isOpen ? 'ring-2 ring-amber/40 border-amber/40' : ''}`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full text-left p-6 flex justify-between items-center gap-4 hover:bg-bg-section/10 transition-colors focus:outline-none"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-display font-bold text-brown text-lg sm:text-xl pr-2 leading-snug">
+                      {item.question}
+                    </span>
+                    <span className="shrink-0 w-8 h-8 rounded-full bg-[#FAF7F2] flex items-center justify-center border border-brown/5 text-brown/70 group-hover:text-amber transition-all">
+                      <ChevronDown 
+                        size={18} 
+                        className={`transition-transform duration-300 ${isOpen ? 'rotate-180 text-amber' : ''}`} 
+                      />
+                    </span>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-6 text-text/85 text-base leading-relaxed border-t border-brown/5 pt-4 bg-[#FCF9F5]/40">
+                          {item.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Contact Box at Footer */}
+          <div className="mt-16 text-center bg-[#FCF9F5] border border-brown/10 p-8 rounded-xl max-w-2xl mx-auto shadow-sm">
+            <div className="flex items-center justify-center gap-2 text-amber mb-3">
+              <HelpCircle size={24} />
+              <p className="font-display text-lg text-brown font-semibold">Nie znalazłeś odpowiedzi na swoje pytanie?</p>
+            </div>
+            <p className="text-text-muted text-sm mb-6 leading-relaxed">
+              Napisz do nas — chętnie udzielimy wszelkich dodatkowych informacji tak szybko, jak to możliwe.
+            </p>
+            <a
+              href="https://www.facebook.com/profile.php?id=61576152080532"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-brown text-text-light hover:bg-brown-light text-xs font-mono font-bold uppercase tracking-widest transition-colors focus:outline-none focus:ring-2 focus:ring-amber/40 rounded-sm shadow-md"
+            >
+              Napisz na Facebooku
+            </a>
+          </div>
+        </div>
+      </section>
+
+            {/* Visually hidden SEO content */}
+            <div className="sr-only">
+              <h2>Smażalnia Niechorze - Najlepsze ryby nad morzem</h2>
+              <p>Szukasz najlepszej smażalni w Niechorzu? Livia to miejsce, gdzie tradycja spotyka się ze smakiem. Nasza wędzarnia Niechorze oferuje świeżo wędzone ryby na drewnie olchowym i bukowym. Ryby u Ciszków to gwarancja jakości i tradycji od pokoleń. W ofercie: wędzone ryby Niechorze, dorsz, halibut, łosoś, sandacz oraz nasze słynne wyroby własne jak paprykarz i sałatki śledziowe. Zapraszamy do Niechorza na ulicę Parkową 5.</p>
+            </div>
+          </>
+        )}
       </main>
 
       {/* --- Footer --- */}
@@ -610,10 +924,84 @@ export default function App() {
             <div>
               <h3 className="font-mono text-amber-light uppercase tracking-widest text-sm mb-6">Nawigacja</h3>
               <ul className="space-y-3 text-text-light/60">
-                <li><a href="#hero" title="Smażalnia ryb Niechorze - Livia" className="hover:text-amber transition-colors">Strona Główna</a></li>
-                <li><a href="#menu" title="Menu smażalni i wędzarni ryb Niechorze" className="hover:text-amber transition-colors">Nasza Oferta</a></li>
-                <li><a href="#lokalizacja" title="Gdzie zjeść ryby Niechorze - dojazd i lokalizacja" className="hover:text-amber transition-colors">Jak dojechać</a></li>
-                <li><a href="#opinie" title="Wasze opinie o wędzonych rybach Niechorze" className="hover:text-amber transition-colors">Wasze Opinie</a></li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('home'); 
+                      setSelectedArticleSlug(undefined); 
+                      window.location.hash = ''; 
+                      window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                    }} 
+                    className="hover:text-amber transition-colors text-left"
+                  >
+                    Strona Główna
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('home'); 
+                      setSelectedArticleSlug(undefined); 
+                      window.location.hash = '#menu';
+                    }} 
+                    className="hover:text-amber transition-colors text-left"
+                  >
+                    Nasza Oferta
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('home'); 
+                      setSelectedArticleSlug(undefined); 
+                      window.location.hash = '#lokalizacja';
+                    }} 
+                    className="hover:text-amber transition-colors text-left"
+                  >
+                    Jak dojechać
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('home'); 
+                      setSelectedArticleSlug(undefined); 
+                      window.location.hash = '#opinie';
+                    }} 
+                    className="hover:text-amber transition-colors text-left"
+                  >
+                    Wasze Opinie
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('home'); 
+                      setSelectedArticleSlug(undefined); 
+                      window.location.hash = '#faq';
+                    }} 
+                    className="hover:text-amber transition-colors text-left"
+                  >
+                    FAQ (Pytania i odpowiedzi)
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    type="button"
+                    onClick={() => { 
+                      setCurrentPage('blog'); 
+                      setSelectedArticleSlug(undefined); 
+                    }} 
+                    className={`hover:text-amber transition-colors text-left ${currentPage === 'blog' ? 'text-amber font-bold border-b border-amber pb-0.5' : ''}`}
+                  >
+                    Rybacka Kronika (Blog)
+                  </button>
+                </li>
               </ul>
             </div>
 
