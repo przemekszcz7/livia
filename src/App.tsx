@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import BlogPage from './components/BlogPage';
 import MenuPage from './components/MenuPage';
-import { getImageUrl } from './images-base64';
 import { 
   Facebook, 
   MapPin, 
@@ -33,7 +32,7 @@ import {
 } from './components/NauticalDecorations';
 
 // --- Data ---
-const PRODUCTS_RAW = [
+const PRODUCTS = [
   {
     id: 1,
     title: "Paprykarz",
@@ -72,7 +71,7 @@ const PRODUCTS_RAW = [
   {
     id: 6,
     title: "Fishburger",
-    desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
+    desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
     image: "/images/fishburger.jpg",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
@@ -119,11 +118,6 @@ const PRODUCTS_RAW = [
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
-
-const PRODUCTS = PRODUCTS_RAW.map(p => ({
-  ...p,
-  image: getImageUrl(p.image)
-}));
 
 const FULL_MENU = [
   {
