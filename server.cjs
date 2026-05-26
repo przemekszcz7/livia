@@ -34,6 +34,11 @@ async function startServer() {
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
+  const imagesPath = import_fs.default.existsSync(import_path.default.join(process.cwd(), "dist", "images")) ? import_path.default.join(process.cwd(), "dist", "images") : import_path.default.join(process.cwd(), "public", "images");
+  app.use("/images", import_express.default.static(imagesPath, {
+    maxAge: "1d",
+    etag: true
+  }));
   if (process.env.NODE_ENV !== "production") {
     const vite = await (0, import_vite.createServer)({
       server: { middlewareMode: true },
