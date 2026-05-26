@@ -37,84 +37,84 @@ const PRODUCTS = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "images/paprykarz.jpg",
+    image: "https://i.ibb.co/Q3kM5CSs/paprykarz.jpg",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "images/losos_z_pieca.jpg",
+    image: "https://i.ibb.co/ksQ03Jzv/lososzpieca.jpg",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "images/golabki_rybne.jpg",
+    image: "https://i.ibb.co/5WjSnT21/golabki.jpg",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "images/halibut.jpg",
+    image: "https://i.ibb.co/k21V53FP/halibut.jpg",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "images/dorsz_livorno.jpg",
+    image: "https://i.ibb.co/svvsngFq/dorszlivorno.jpg",
     alt: "świeży dorsz w sosie livorno - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
     desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
-    image: "images/fishburger.jpg",
+    image: "https://i.ibb.co/LD73r6yF/burger.jpg",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 7,
     title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
-    image: "images/krem_z_pomidorow.jpg",
+    image: "https://i.ibb.co/7tPypt11/krempomidor.jpg",
     alt: "rozgrzewający krem z pomidorów z rybą - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 8,
     title: "Witryna sklepowa",
     desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
-    image: "images/witryna_sklepowa.jpg",
+    image: "https://i.ibb.co/h1WJdCbh/witryna.jpg",
     alt: "świeże i wędzone ryby w gablocie - wędzarnia niechorze, smażalnia niechorze, ryby niechorze"
   },
   {
     id: 9,
     title: "Nasza Wędzarnia",
     desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
-    image: "images/nasza_wedzarnia.jpg",
+    image: "https://i.ibb.co/TMM0Fzfk/wedzarnia.jpg",
     alt: "tradycyjna rzemieślnicza wędzarnia u Ciszków - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 10,
     title: "Śledzie w różnych smakach",
     desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
-    image: "images/domowe_sledzie.jpg",
+    image: "https://i.ibb.co/VY1D0bZj/sledz.jpg",
     alt: "domowe marynowane śledzie - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 11,
     title: "Smażone ryby",
     desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
-    image: "images/smazona_fladra.jpg",
+    image: "https://i.ibb.co/xKTDzW3c/smazone.jpg",
     alt: "chrupiąca smażona flądra u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 12,
     title: "Smażone ryby",
     desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
-    image: "images/smazony_dorsz.jpg",
+    image: "https://i.ibb.co/1GxHwCmF/smazone2.jpg",
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
