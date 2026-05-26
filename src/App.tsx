@@ -37,84 +37,84 @@ const PRODUCTS = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "/images/paprykarz.jpg",
+    image: "./images/paprykarz.jpg",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "/images/losos_z_pieca.jpg",
+    image: "./images/losos_z_pieca.jpg",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "/images/golabki_rybne.jpg",
+    image: "./images/golabki_rybne.jpg",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "/images/halibut.jpg",
+    image: "./images/halibut.jpg",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "/images/dorsz_livorno.jpg",
+    image: "./images/dorsz_livorno.jpg",
     alt: "świeży dorsz w sosie livorno - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
-    desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
-    image: "/images/fishburger.jpg",
+    desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
+    image: "./images/fishburger.jpg",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 7,
     title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
-    image: "/images/krem_z_pomidorow.jpg",
+    image: "./images/krem_z_pomidorow.jpg",
     alt: "rozgrzewający krem z pomidorów z rybą - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 8,
     title: "Witryna sklepowa",
     desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
-    image: "/images/witryna_sklepowa.jpg",
+    image: "./images/witryna_sklepowa.jpg",
     alt: "świeże i wędzone ryby w gablocie - wędzarnia niechorze, smażalnia niechorze, ryby niechorze"
   },
   {
     id: 9,
     title: "Nasza Wędzarnia",
     desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
-    image: "/images/nasza_wedzarnia.jpg",
+    image: "./images/nasza_wedzarnia.jpg",
     alt: "tradycyjna rzemieślnicza wędzarnia u Ciszków - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 10,
     title: "Śledzie w różnych smakach",
     desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
-    image: "/images/domowe_sledzie.jpg",
+    image: "./images/domowe_sledzie.jpg",
     alt: "domowe marynowane śledzie - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 11,
     title: "Smażone ryby",
     desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
-    image: "/images/smazona_fladra.jpg",
+    image: "./images/smazona_fladra.jpg",
     alt: "chrupiąca smażona flądra u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 12,
     title: "Smażone ryby",
     desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
-    image: "/images/smazony_dorsz.jpg",
+    image: "./images/smazony_dorsz.jpg",
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
@@ -193,72 +193,76 @@ const FAQ_ITEMS = [
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'blog' | 'menu'>('home');
-  const [selectedArticleSlug, setSelectedArticleSlug] = useState<string | undefined>(undefined);
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
+  const [currentHash, setCurrentHash] = useState(() => window.location.hash);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  // Sync hash routing
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash.startsWith('#/blog/')) {
-        const slug = hash.replace('#/blog/', '');
-        setCurrentPage('blog');
-        setSelectedArticleSlug(slug);
-      } else if (hash === '#/blog') {
-        setCurrentPage('blog');
-        setSelectedArticleSlug(undefined);
-      } else if (hash === '#/menu') {
-        setCurrentPage('menu');
-        setSelectedArticleSlug(undefined);
-      } else {
-        // If it's a standard home anchor, keep 'home'
-        if (hash === '' || hash === '#hero' || hash === '#nasze-ryby' || hash === '#lokalizacja' || hash === '#opinie' || hash === '#faq') {
-          setCurrentPage('home');
-          setSelectedArticleSlug(undefined);
-          
-          if (hash !== '' && hash !== '#hero') {
-            setTimeout(() => {
-              const element = document.querySelector(hash);
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-              }
-            }, 100);
-          }
+  // Derive page and slug states based on pathname
+  let currentPage: 'home' | 'blog' | 'menu' = 'home';
+  let selectedArticleSlug: string | undefined = undefined;
+
+  const decodedPath = decodeURIComponent(currentPath);
+  if (decodedPath.startsWith('/blog/')) {
+    currentPage = 'blog';
+    selectedArticleSlug = decodedPath.substring('/blog/'.length);
+  } else if (decodedPath === '/blog' || decodedPath === '/blog/') {
+    currentPage = 'blog';
+  } else if (decodedPath === '/menu' || decodedPath === '/menu/') {
+    currentPage = 'menu';
+  } else {
+    currentPage = 'home';
+  }
+
+  // Unified navigation helper
+  const navigateTo = (path: string, hash: string = '') => {
+    window.history.pushState(null, '', path + hash);
+    setCurrentPath(path);
+    setCurrentHash(hash);
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
         }
-      }
+      }, 50);
+    }
+  };
+
+  const setSelectedArticleSlugLocal = (slug: string | undefined) => {
+    if (slug) {
+      navigateTo(`/blog/${slug}`);
+    } else {
+      navigateTo('/blog');
+    }
+  };
+
+  const goBackToHome = () => {
+    navigateTo('/');
+  };
+
+  // Sync back/forward clicks on URL path
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+      setCurrentHash(window.location.hash);
     };
 
-    // Run on mount
-    handleHashChange();
+    window.addEventListener('popstate', handlePopState);
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  // Update hash when React state shifts
-  useEffect(() => {
-    if (currentPage === 'blog') {
-      if (selectedArticleSlug) {
-        if (window.location.hash !== `#/blog/${selectedArticleSlug}`) {
-          window.location.hash = `#/blog/${selectedArticleSlug}`;
+    // If initial load has a hash anchor on home route, scroll to it automatically
+    if (currentPage === 'home' && currentHash) {
+      setTimeout(() => {
+        const element = document.querySelector(currentHash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
         }
-      } else {
-        if (window.location.hash !== '#/blog') {
-          window.location.hash = `#/blog`;
-        }
-      }
-    } else if (currentPage === 'menu') {
-      if (window.location.hash !== '#/menu') {
-        window.location.hash = '#/menu';
-      }
-    } else {
-      // If returning home, clean blog/menu routing hashes
-      if (window.location.hash.startsWith('#/blog') || window.location.hash === '#/menu') {
-        window.location.hash = '';
-      }
+      }, 200);
     }
-  }, [currentPage, selectedArticleSlug]);
+
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   return (
     <div className="min-h-screen selection:bg-amber/30 selection:text-brown bg-bg">
@@ -267,12 +271,7 @@ export default function App() {
         <nav className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between" aria-label="Nawigacja główna">
           <button 
             type="button"
-            onClick={() => { 
-              setCurrentPage('home'); 
-              setSelectedArticleSlug(undefined); 
-              window.location.hash = '';
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} 
+            onClick={() => navigateTo('/')} 
             className="flex items-center gap-3 cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-amber/45 rounded-md px-2 py-1"
           >
             <Fish className="text-amber animate-pulse" size={28} />
@@ -283,59 +282,35 @@ export default function App() {
           <div className="hidden md:flex items-center gap-8 font-mono text-sm uppercase tracking-widest text-text-muted">
             <button 
               type="button"
-              onClick={() => { 
-                if (currentPage !== 'home') {
-                  setCurrentPage('home');
-                  setSelectedArticleSlug(undefined);
-                }
-                window.location.hash = '#nasze-ryby';
-              }} 
-              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#nasze-ryby' ? 'text-amber' : 'text-text-muted'}`}
+              onClick={() => navigateTo('/', '#nasze-ryby')} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentHash === '#nasze-ryby' ? 'text-amber' : 'text-text-muted'}`}
             >
               Nasze Ryby
             </button>
             <button 
               type="button"
-              onClick={() => { 
-                setCurrentPage('menu');
-                setSelectedArticleSlug(undefined);
-              }} 
+              onClick={() => navigateTo('/menu')} 
               className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentPage === 'menu' ? 'text-amber font-extrabold border-b-2 border-amber' : 'text-text-muted'}`}
             >
               Pełne Menu
             </button>
             <button 
               type="button"
-              onClick={() => { 
-                if (currentPage !== 'home') {
-                  setCurrentPage('home');
-                  setSelectedArticleSlug(undefined);
-                }
-                window.location.hash = '#lokalizacja';
-              }} 
-              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#lokalizacja' ? 'text-amber' : 'text-text-muted'}`}
+              onClick={() => navigateTo('/', '#lokalizacja')} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentHash === '#lokalizacja' ? 'text-amber' : 'text-text-muted'}`}
             >
               Dojazd
             </button>
             <button 
               type="button"
-              onClick={() => { 
-                if (currentPage !== 'home') {
-                  setCurrentPage('home');
-                  setSelectedArticleSlug(undefined);
-                }
-                window.location.hash = '#opinie';
-              }} 
-              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${window.location.hash === '#opinie' ? 'text-amber' : 'text-text-muted'}`}
+              onClick={() => navigateTo('/', '#opinie')} 
+              className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentHash === '#opinie' ? 'text-amber' : 'text-text-muted'}`}
             >
               Goście
             </button>
             <button 
               type="button"
-              onClick={() => { 
-                setCurrentPage('blog'); 
-                setSelectedArticleSlug(undefined); 
-              }} 
+              onClick={() => navigateTo('/blog')} 
               className={`hover:text-amber transition-colors font-mono text-sm uppercase tracking-widest ${currentPage === 'blog' ? 'text-amber font-extrabold border-b-2 border-amber' : 'text-text-muted'}`}
             >
               Blog
@@ -389,20 +364,17 @@ export default function App() {
               <button 
                 type="button"
                 onClick={() => { 
-                  setCurrentPage('home'); 
-                  setSelectedArticleSlug(undefined);
+                  navigateTo('/', '#nasze-ryby');
                   setMobileMenuOpen(false); 
-                  window.location.hash = '#nasze-ryby';
                 }}
-                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#nasze-ryby' ? 'text-amber' : 'text-text-light'}`}
+                className={`font-display hover:text-amber transition-colors ${currentHash === '#nasze-ryby' ? 'text-amber' : 'text-text-light'}`}
               >
                 Nasze Ryby
               </button>
               <button 
                 type="button"
                 onClick={() => { 
-                  setCurrentPage('menu'); 
-                  setSelectedArticleSlug(undefined);
+                  navigateTo('/menu');
                   setMobileMenuOpen(false); 
                 }}
                 className={`font-display hover:text-amber transition-colors ${currentPage === 'menu' ? 'text-amber' : 'text-text-light'}`}
@@ -412,32 +384,27 @@ export default function App() {
               <button 
                 type="button"
                 onClick={() => { 
-                  setCurrentPage('home'); 
-                  setSelectedArticleSlug(undefined);
+                  navigateTo('/', '#lokalizacja');
                   setMobileMenuOpen(false); 
-                  window.location.hash = '#lokalizacja';
                 }}
-                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#lokalizacja' ? 'text-amber' : 'text-text-light'}`}
+                className={`font-display hover:text-amber transition-colors ${currentHash === '#lokalizacja' ? 'text-amber' : 'text-text-light'}`}
               >
                 Lokalizacja
               </button>
               <button 
                 type="button"
                 onClick={() => { 
-                  setCurrentPage('home'); 
-                  setSelectedArticleSlug(undefined);
+                  navigateTo('/', '#opinie');
                   setMobileMenuOpen(false); 
-                  window.location.hash = '#opinie';
                 }}
-                className={`font-display hover:text-amber transition-colors ${window.location.hash === '#opinie' ? 'text-amber' : 'text-text-light'}`}
+                className={`font-display hover:text-amber transition-colors ${currentHash === '#opinie' ? 'text-amber' : 'text-text-light'}`}
               >
                 Opinie
               </button>
               <button 
                 type="button"
                 onClick={() => { 
-                  setCurrentPage('blog'); 
-                  setSelectedArticleSlug(undefined); 
+                  navigateTo('/blog');
                   setMobileMenuOpen(false); 
                 }}
                 className={`font-display hover:text-amber transition-colors ${currentPage === 'blog' ? 'text-amber' : 'text-text-light'}`}
@@ -454,21 +421,13 @@ export default function App() {
         
         {currentPage === 'blog' ? (
           <BlogPage 
-            onBackToHome={() => {
-              setCurrentPage('home');
-              setSelectedArticleSlug(undefined);
-              window.location.hash = '';
-            }} 
+            onBackToHome={goBackToHome} 
             selectedArticleSlug={selectedArticleSlug}
-            setSelectedArticleSlug={setSelectedArticleSlug}
+            setSelectedArticleSlug={setSelectedArticleSlugLocal}
           />
         ) : currentPage === 'menu' ? (
           <MenuPage 
-            onBackToHome={() => {
-              setCurrentPage('home');
-              setSelectedArticleSlug(undefined);
-              window.location.hash = '';
-            }}
+            onBackToHome={goBackToHome}
           />
         ) : (
           <>
@@ -623,8 +582,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => {
-                setCurrentPage('menu');
-                window.scrollTo({ top: 0 });
+                navigateTo('/menu');
               }}
               className="inline-flex items-center gap-3 px-10 py-5 bg-brown text-text-light font-display text-xl rounded-sm hover:bg-brown-light transition-soft shadow-2xl hover:scale-105 active:scale-95 cursor-pointer border-2 border-amber/40 hover:border-amber focus:outline-none focus:ring-4 focus:ring-amber/40 font-semibold"
               title="Wyświetl pełną kartę dań restauracji Livia"
@@ -927,12 +885,7 @@ export default function App() {
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('home'); 
-                      setSelectedArticleSlug(undefined); 
-                      window.location.hash = ''; 
-                      window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                    }} 
+                    onClick={() => navigateTo('/')} 
                     className="hover:text-amber transition-colors text-left"
                   >
                     Strona Główna
@@ -941,24 +894,16 @@ export default function App() {
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('home'); 
-                      setSelectedArticleSlug(undefined); 
-                      window.location.hash = '#menu';
-                    }} 
+                    onClick={() => navigateTo('/menu')} 
                     className="hover:text-amber transition-colors text-left"
                   >
-                    Nasza Oferta
+                    Pelna Oferta (Menu)
                   </button>
                 </li>
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('home'); 
-                      setSelectedArticleSlug(undefined); 
-                      window.location.hash = '#lokalizacja';
-                    }} 
+                    onClick={() => navigateTo('/', '#lokalizacja')} 
                     className="hover:text-amber transition-colors text-left"
                   >
                     Jak dojechać
@@ -967,11 +912,7 @@ export default function App() {
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('home'); 
-                      setSelectedArticleSlug(undefined); 
-                      window.location.hash = '#opinie';
-                    }} 
+                    onClick={() => navigateTo('/', '#opinie')} 
                     className="hover:text-amber transition-colors text-left"
                   >
                     Wasze Opinie
@@ -980,11 +921,7 @@ export default function App() {
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('home'); 
-                      setSelectedArticleSlug(undefined); 
-                      window.location.hash = '#faq';
-                    }} 
+                    onClick={() => navigateTo('/', '#faq')} 
                     className="hover:text-amber transition-colors text-left"
                   >
                     FAQ (Pytania i odpowiedzi)
@@ -993,10 +930,7 @@ export default function App() {
                 <li>
                   <button 
                     type="button"
-                    onClick={() => { 
-                      setCurrentPage('blog'); 
-                      setSelectedArticleSlug(undefined); 
-                    }} 
+                    onClick={() => navigateTo('/blog')} 
                     className={`hover:text-amber transition-colors text-left ${currentPage === 'blog' ? 'text-amber font-bold border-b border-amber pb-0.5' : ''}`}
                   >
                     Rybacka Kronika (Blog)
