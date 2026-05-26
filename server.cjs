@@ -34,8 +34,13 @@ async function startServer() {
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
-  const imagesPath = import_fs.default.existsSync(import_path.default.join(process.cwd(), "dist", "images")) ? import_path.default.join(process.cwd(), "dist", "images") : import_path.default.join(process.cwd(), "public", "images");
-  app.use("/images", import_express.default.static(imagesPath, {
+  const distImagesPath = import_path.default.join(process.cwd(), "dist", "images");
+  const publicImagesPath = import_path.default.join(process.cwd(), "public", "images");
+  app.use("/images", import_express.default.static(distImagesPath, {
+    maxAge: "1d",
+    etag: true
+  }));
+  app.use("/images", import_express.default.static(publicImagesPath, {
     maxAge: "1d",
     etag: true
   }));
@@ -78,7 +83,11 @@ async function startServer() {
         }
       }
     }));
-    app.get("*", (req, res) => {
+    app.get("*", (req, res, next) => {
+      const ext = import_path.default.extname(req.path);
+      if (ext && ext !== ".html") {
+        return res.status(404).send("Not Found");
+      }
       const headers = {
         "Cache-Control": "public, max-age=0, must-revalidate"
       };
