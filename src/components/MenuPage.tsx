@@ -2,9 +2,10 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, Fish, MapPin, Phone, Clock, Sparkles } from 'lucide-react';
 import { SmokeWisp, RopeDivider, AnchorIcon, FishIcon } from './NauticalDecorations';
+import { getImageUrl } from '../images-base64';
 
 // We duplicate the FULL_MENU and PRODUCTS data here or reuse to keep it contained, clean, and modular.
-export const PRODUCTS_SHOWCASE = [
+const PRODUCTS_SHOWCASE_RAW = [
   {
     id: 1,
     title: "Paprykarz",
@@ -34,6 +35,11 @@ export const PRODUCTS_SHOWCASE = [
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   }
 ];
+
+export const PRODUCTS_SHOWCASE = PRODUCTS_SHOWCASE_RAW.map(p => ({
+  ...p,
+  image: getImageUrl(p.image)
+}));
 
 export const FULL_MENU_DATA = [
   {

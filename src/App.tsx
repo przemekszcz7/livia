@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import BlogPage from './components/BlogPage';
 import MenuPage from './components/MenuPage';
+import { getImageUrl } from './images-base64';
 import { 
   Facebook, 
   MapPin, 
@@ -32,7 +33,7 @@ import {
 } from './components/NauticalDecorations';
 
 // --- Data ---
-const PRODUCTS = [
+const PRODUCTS_RAW = [
   {
     id: 1,
     title: "Paprykarz",
@@ -118,6 +119,11 @@ const PRODUCTS = [
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
+
+const PRODUCTS = PRODUCTS_RAW.map(p => ({
+  ...p,
+  image: getImageUrl(p.image)
+}));
 
 const FULL_MENU = [
   {

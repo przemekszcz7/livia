@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { getImageUrl } from '../images-base64';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -43,7 +44,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "26 maja 2026",
       author: "Rodzina Ciszków",
       readTime: "5 min czytania",
-      image: "/images/nasza_wedzarnia.jpg",
+      image: getImageUrl("/images/nasza_wedzarnia.jpg"),
       tags: ["Tradycja", "Wędzenie", "Ryby", "Niechorze"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -53,7 +54,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/nasza_wedzarnia.jpg" 
+              src={getImageUrl("/images/nasza_wedzarnia.jpg")} 
               alt="nasza tradycyjna wędzarnia ryb niechorze - Livia u Ciszków" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -179,7 +180,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "12 maja 2026",
       author: "Odkryj Niechorze",
       readTime: "4 min czytania",
-      image: "/images/witryna_sklepowa.jpg",
+      image: getImageUrl("/images/witryna_sklepowa.jpg"),
       tags: ["Atrakcje", "Przewodnik", "Niechorze", "Zwiedzanie"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -189,7 +190,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/witryna_sklepowa.jpg" 
+              src={getImageUrl("/images/witryna_sklepowa.jpg")} 
               alt="witryna sklepowa SMAŻALNIA LIVIA Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -317,7 +318,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "04 maja 2026",
       author: "Rodzina Ciszków",
       readTime: "5 min czytania",
-      image: "/images/domowe_sledzie.jpg",
+      image: getImageUrl("/images/domowe_sledzie.jpg"),
       tags: ["Śledzie", "Kuchnia", "Zdrowie", "Tradycja"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -327,7 +328,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/domowe_sledzie.jpg" 
+              src={getImageUrl("/images/domowe_sledzie.jpg")} 
               alt="domowe śledzie wędzarnia Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
