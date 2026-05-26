@@ -16,12 +16,16 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  // Explicitly serve /images directory directly to bypass any Vite middleware or relative route conflicts
-  const imagesPath = fs.existsSync(path.join(process.cwd(), "dist", "images"))
-    ? path.join(process.cwd(), "dist", "images")
-    : path.join(process.cwd(), "public", "images");
+  // Explicitly serve /images directory from both dist and public. Express static will fall through if not found.
+  const distImagesPath = path.join(process.cwd(), "dist", "images");
+  const publicImagesPath = path.join(process.cwd(), "public", "images");
 
-  app.use("/images", express.static(imagesPath, {
+  app.use("/images", express.static(distImagesPath, {
+    maxAge: "1d",
+    etag: true
+  }));
+
+  app.use("/images", express.static(publicImagesPath, {
     maxAge: "1d",
     etag: true
   }));
@@ -78,7 +82,13 @@ async function startServer() {
     }));
 
     // Fallback all other routes to single-page application index.html
-    app.get("*", (req, res) => {
+    app.get("*", (req, res, next) => {
+      // If the request targets a missing static file with an extension, don't serve index.html
+      const ext = path.extname(req.path);
+      if (ext && ext !== ".html") {
+        return res.status(404).send("Not Found");
+      }
+
       const headers: Record<string, string> = {
         "Cache-Control": "public, max-age=0, must-revalidate"
       };

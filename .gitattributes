@@ -1,0 +1,7 @@
+# Prevent Git LFS from tracking images and corrupting them upon transfer
+*.jpg -filter -text -merge
+*.jpeg -filter -text -merge
+*.png -filter -text -merge
+*.gif -filter -text -merge
+*.svg -filter -text -merge
+*.ico -filter -text -merge
