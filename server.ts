@@ -16,6 +16,16 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  // Explicitly serve /images directory directly to bypass any Vite middleware or relative route conflicts
+  const imagesPath = fs.existsSync(path.join(process.cwd(), "dist", "images"))
+    ? path.join(process.cwd(), "dist", "images")
+    : path.join(process.cwd(), "public", "images");
+
+  app.use("/images", express.static(imagesPath, {
+    maxAge: "1d",
+    etag: true
+  }));
+
   // Integrate Vite middleware or serve static files with optimized Cache-Control headers
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
