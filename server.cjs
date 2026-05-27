@@ -83,6 +83,30 @@ async function startServer() {
         }
       }
     }));
+    app.get("/blog", (req, res) => {
+      const blogIndexPath = import_path.default.join(distPath, "blog", "index.html");
+      const headers = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(import_fs.default.existsSync(blogIndexPath) ? blogIndexPath : indexPath, { headers });
+    });
+    app.get("/blog/*", (req, res) => {
+      const blogIndexPath = import_path.default.join(distPath, "blog", "index.html");
+      const headers = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(import_fs.default.existsSync(blogIndexPath) ? blogIndexPath : indexPath, { headers });
+    });
+    app.get("/menu", (req, res) => {
+      const menuIndexPath = import_path.default.join(distPath, "menu", "index.html");
+      const headers = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(import_fs.default.existsSync(menuIndexPath) ? menuIndexPath : indexPath, { headers });
+    });
+    app.get("/menu/*", (req, res) => {
+      const menuIndexPath = import_path.default.join(distPath, "menu", "index.html");
+      const headers = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(import_fs.default.existsSync(menuIndexPath) ? menuIndexPath : indexPath, { headers });
+    });
     app.get("*", (req, res, next) => {
       const ext = import_path.default.extname(req.path);
       if (ext && ext !== ".html") {
