@@ -1,16 +1,57 @@
+ML
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
-
-<url>
-  <loc>https://liviasmazalniawedzarnia.pl/</loc>
-  <lastmod>2026-05-18T05:40:37+00:00</lastmod>
-</url>
-
-
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+ 
+  <!-- Strona główna -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+ 
+  <!-- Menu -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/menu</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+ 
+  <!-- Blog (lista wpisów) -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/blog</loc>
+    <lastmod>2026-05-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+ 
+  <!-- Wpis blogowy: Jak wędzi się ryby -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/blog/jak-wedzi-sie-ryby-tradycyjny-proces</loc>
+    <lastmod>2026-05-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+ 
+  <!-- Wpis blogowy: Co zwiedzić w Niechorzu -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/blog/co-zwiedzic-w-niechorzu-przewodnik</loc>
+    <lastmod>2026-05-12</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+ 
+  <!-- Wpis blogowy: Śledź bałtycki -->
+  <url>
+    <loc>https://liviasmazalniawedzarnia.pl/blog/sledz-baltycki-krol-nadmorskiego-stolu-i-jego-wlasciwosci</loc>
+    <lastmod>2026-05-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+ 
 </urlset>
