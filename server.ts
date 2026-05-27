@@ -81,6 +81,35 @@ async function startServer() {
       }
     }));
 
+    // Explicit routes for Blog and Menu subpages to serve their compiled index.html
+    app.get("/blog", (req, res) => {
+      const blogIndexPath = path.join(distPath, "blog", "index.html");
+      const headers: Record<string, string> = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(fs.existsSync(blogIndexPath) ? blogIndexPath : indexPath, { headers });
+    });
+
+    app.get("/blog/*", (req, res) => {
+      const blogIndexPath = path.join(distPath, "blog", "index.html");
+      const headers: Record<string, string> = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(fs.existsSync(blogIndexPath) ? blogIndexPath : indexPath, { headers });
+    });
+
+    app.get("/menu", (req, res) => {
+      const menuIndexPath = path.join(distPath, "menu", "index.html");
+      const headers: Record<string, string> = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(fs.existsSync(menuIndexPath) ? menuIndexPath : indexPath, { headers });
+    });
+
+    app.get("/menu/*", (req, res) => {
+      const menuIndexPath = path.join(distPath, "menu", "index.html");
+      const headers: Record<string, string> = { "Cache-Control": "public, max-age=0, must-revalidate" };
+      if (preloadHeaders.length > 0) headers["Link"] = preloadHeaders.join(", ");
+      res.sendFile(fs.existsSync(menuIndexPath) ? menuIndexPath : indexPath, { headers });
+    });
+
     // Fallback all other routes to single-page application index.html
     app.get("*", (req, res, next) => {
       // If the request targets a missing static file with an extension, don't serve index.html
