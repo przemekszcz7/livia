@@ -36,8 +36,9 @@ async function startServer() {
     }
   }));
 
-  // Integrate Vite middleware or serve static files with optimized Cache-Control headers
-  if (process.env.NODE_ENV !== "production") {
+  // Default to production mode. Development mode is only active when NODE_ENV is explicitly "development" or "dev"
+  const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev";
+  if (isDev) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
