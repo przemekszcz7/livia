@@ -9,12 +9,21 @@ export default defineConfig(({mode}) => {
     base: '/',
     plugins: [react(), tailwindcss()],
     build: {
+      target: 'esnext',
+      minify: 'esbuild',
+      cssCodeSplit: true,
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
           blog: path.resolve(__dirname, 'blog/index.html'),
           menu: path.resolve(__dirname, 'menu/index.html'),
         },
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'motion-vendor': ['motion']
+          }
+        }
       },
     },
     define: {
