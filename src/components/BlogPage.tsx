@@ -43,7 +43,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "26 maja 2026",
       author: "Rodzina Ciszków",
       readTime: "5 min czytania",
-      image: "/images/wedzarnia.webp",
+      image: "https://i.ibb.co/TMM0Fzfk/wedzarnia.jpg",
       tags: ["Tradycja", "Wędzenie", "Ryby", "Niechorze"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -53,7 +53,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/wedzarnia.webp" 
+              src="https://i.ibb.co/TMM0Fzfk/wedzarnia.jpg" 
               alt="nasza tradycyjna wędzarnia ryb niechorze - Livia u Ciszków" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -183,7 +183,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "12 maja 2026",
       author: "Odkryj Niechorze",
       readTime: "4 min czytania",
-      image: "/images/witryna.webp",
+      image: "https://i.ibb.co/h1WJdCbh/witryna.jpg",
       tags: ["Atrakcje", "Przewodnik", "Niechorze", "Zwiedzanie"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -193,7 +193,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/witryna.webp" 
+              src="https://i.ibb.co/h1WJdCbh/witryna.jpg" 
               alt="witryna sklepowa SMAŻALNIA LIVIA Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -325,7 +325,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
       date: "04 maja 2026",
       author: "Rodzina Ciszków",
       readTime: "5 min czytania",
-      image: "/images/sledz.webp",
+      image: "https://i.ibb.co/VY1D0bZj/sledz.jpg",
       tags: ["Śledzie", "Kuchnia", "Zdrowie", "Tradycja"],
       content: (
         <article className="prose prose-stone max-w-none text-text">
@@ -335,7 +335,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
 
           <div className="relative my-8 rounded-lg overflow-hidden border border-brown/20 shadow-xl max-h-[450px]">
             <img 
-              src="/images/sledz.webp" 
+              src="https://i.ibb.co/VY1D0bZj/sledz.jpg" 
               alt="domowe śledzie wędzarnia Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"

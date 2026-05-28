@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-
-const BlogPage = lazy(() => import('./components/BlogPage'));
-const MenuPage = lazy(() => import('./components/MenuPage'));
+import BlogPage from './components/BlogPage';
+import MenuPage from './components/MenuPage';
 import { 
   Facebook, 
   MapPin, 
@@ -38,84 +37,84 @@ const PRODUCTS = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "/images/paprykarz.webp",
+    image: "https://i.ibb.co/Q3kM5CSs/paprykarz.jpg",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "/images/lososzpieca.webp",
+    image: "https://i.ibb.co/ksQ03Jzv/lososzpieca.jpg",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "/images/golabki.webp",
+    image: "https://i.ibb.co/5WjSnT21/golabki.jpg",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "/images/halibut.webp",
+    image: "https://i.ibb.co/k21V53FP/halibut.jpg",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "/images/dorszlivorno.webp",
+    image: "https://i.ibb.co/svvsngFq/dorszlivorno.jpg",
     alt: "świeży dorsz w sosie livorno - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
     desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
-    image: "/images/burger.webp",
+    image: "https://i.ibb.co/LD73r6yF/burger.jpg",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 7,
     title: "Krem z pomidorów",
     desc: "Aromatyczna i rozgrzewająca, przygotowana według tradycyjnej receptury",
-    image: "/images/krempomidor.webp",
+    image: "https://i.ibb.co/7tPypt11/krempomidor.jpg",
     alt: "rozgrzewający krem z pomidorów z rybą - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 8,
     title: "Witryna sklepowa",
     desc: "Szeroki wybór ryb i przetworów dostępnych na miejscu",
-    image: "/images/witryna.webp",
+    image: "https://i.ibb.co/h1WJdCbh/witryna.jpg",
     alt: "świeże i wędzone ryby w gablocie - wędzarnia niechorze, smażalnia niechorze, ryby niechorze"
   },
   {
     id: 9,
     title: "Nasza Wędzarnia",
     desc: "Tradycyjne wędzenie na drewnie olchowym i bukowym dla unikalnego aromatu",
-    image: "/images/wedzarnia.webp",
+    image: "https://i.ibb.co/TMM0Fzfk/wedzarnia.jpg",
     alt: "tradycyjna rzemieślnicza wędzarnia u Ciszków - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 10,
     title: "Śledzie w różnych smakach",
     desc: "Domowe marynaty i unikalne kompozycje smakowe prosto z naszej kuchni",
-    image: "/images/sledz.webp",
+    image: "https://i.ibb.co/VY1D0bZj/sledz.jpg",
     alt: "domowe marynowane śledzie - wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 11,
     title: "Smażone ryby",
     desc: "Chrupiące, smażone na złocisty kolor według tradycyjnej receptury",
-    image: "/images/smazone.webp",
+    image: "https://i.ibb.co/xKTDzW3c/smazone.jpg",
     alt: "chrupiąca smażona flądra u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 12,
     title: "Smażone ryby",
     desc: "Najlepszej jakości ryby, podawane prosto z naszej smażalni",
-    image: "/images/smazone2.webp",
+    image: "https://i.ibb.co/1GxHwCmF/smazone2.jpg",
     alt: "złocisty smażony dorsz filet - smażalnia niechorze, ryby niechorze"
   }
 ];
@@ -197,7 +196,6 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const [currentHash, setCurrentHash] = useState(() => window.location.hash);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const [visibleProducts, setVisibleProducts] = useState(4);
 
   // Derive page and slug states based on pathname
   let currentPage: 'home' | 'blog' | 'menu' = 'home';
@@ -422,33 +420,15 @@ export default function App() {
         <h1 className="sr-only">Livia - Smażalnia Niechorze | Wędzarnia Niechorze | Ryby Niechorze</h1>
         
         {currentPage === 'blog' ? (
-          <Suspense fallback={
-            <div className="min-h-screen bg-bg-main flex items-center justify-center py-20">
-              <div className="text-center">
-                <div className="inline-block w-8 h-8 border-4 border-brown/30 border-t-brown rounded-full animate-spin mb-4" />
-                <p className="font-display text-lg text-brown font-medium">Wczytywanie bloga...</p>
-              </div>
-            </div>
-          }>
-            <BlogPage 
-              onBackToHome={goBackToHome} 
-              selectedArticleSlug={selectedArticleSlug}
-              setSelectedArticleSlug={setSelectedArticleSlugLocal}
-            />
-          </Suspense>
+          <BlogPage 
+            onBackToHome={goBackToHome} 
+            selectedArticleSlug={selectedArticleSlug}
+            setSelectedArticleSlug={setSelectedArticleSlugLocal}
+          />
         ) : currentPage === 'menu' ? (
-          <Suspense fallback={
-            <div className="min-h-screen bg-bg-main flex items-center justify-center py-20">
-              <div className="text-center">
-                <div className="inline-block w-8 h-8 border-4 border-brown/30 border-t-brown rounded-full animate-spin mb-4" />
-                <p className="font-display text-lg text-brown font-medium">Wczytywanie menu...</p>
-              </div>
-            </div>
-          }>
-            <MenuPage 
-              onBackToHome={goBackToHome}
-            />
-          </Suspense>
+          <MenuPage 
+            onBackToHome={goBackToHome}
+          />
         ) : (
           <>
             {/* --- Hero Section --- */}
@@ -560,7 +540,7 @@ export default function App() {
           </header>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-            {PRODUCTS.slice(0, visibleProducts).map((item, idx) => (
+            {PRODUCTS.map((item, idx) => (
               <motion.div 
                 key={item.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -597,21 +577,6 @@ export default function App() {
               </motion.div>
             ))}
           </div>
-
-          {/* Show More Products Button */}
-          {visibleProducts < PRODUCTS.length && (
-            <div className="mt-12 text-center relative z-10">
-              <button
-                type="button"
-                onClick={() => setVisibleProducts(PRODUCTS.length)}
-                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-brown text-brown hover:bg-brown hover:text-text-light font-display text-lg rounded-sm transition-soft shadow-md hover:scale-105 focus:outline-none focus:ring-4 focus:ring-brown/30 font-bold cursor-pointer"
-                title="Rozwiń pełną ofertę rzemieślniczych wyrobów"
-              >
-                Pokaż wszystkie specjały ({PRODUCTS.length - visibleProducts} więcej)
-                <ChevronDown size={20} className="animate-bounce" />
-              </button>
-            </div>
-          )}
 
           {/* --- Button: view full menu --- */}
           <div className="mt-20 text-center relative z-10">

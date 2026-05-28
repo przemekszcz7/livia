@@ -18,6 +18,12 @@ export default defineConfig(({mode}) => {
           blog: path.resolve(__dirname, 'blog/index.html'),
           menu: path.resolve(__dirname, 'menu/index.html'),
         },
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'motion-vendor': ['motion']
+          }
+        }
       },
     },
     define: {
