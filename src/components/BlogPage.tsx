@@ -57,6 +57,9 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               alt="nasza tradycyjna wędzarnia ryb niechorze - Livia u Ciszków" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              width={800}
+              height={450}
             />
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white text-xs font-mono">
               Rzemieślnicza wędzarnia u Ciszków (Livia) - tradycyjne wędzenie na drewnie olchowym i bukowym
@@ -103,7 +106,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
           </h2>
           <div className="space-y-4 mb-8">
             <p className="leading-relaxed">
-              Aromat wędzonki zależy w ogromnej mierze od rodzaju użytego drewna. Do wędzenia ryb najlepiej sprawdzają się drewna liściaste — <strong>olcha, buk, jabłoń, wiśnia</strong>. Olcha jest klasycznym wyborem nad Bałtykiem: daje delikatny, lekko słodkawy dym, który nie przytłacza delikatnego smaku ryby.
+              Aromat wędzonki zależy w ogromnej mierze od rodzaju użytego drewna. Do wędzenia ryb najlepiej sprawdzają się drewna liściaste — <strong>olcha, buk</strong>. Olcha jest klasycznym wyborem nad Bałtykiem: daje delikatny, lekko słodkawy dym, który nie przytłacza delikatnego smaku ryby.
             </p>
             <p className="leading-relaxed">
               Drewna iglastego — sosny, świerku — <strong>absolutnie się nie używa</strong>. Żywica, która się w nim znajduje, wytwarza podczas spalania substancje nadające rybie gorzki, nieprzyjemny smak.
@@ -193,6 +196,9 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               alt="witryna sklepowa SMAŻALNIA LIVIA Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              width={800}
+              height={450}
             />
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white text-xs font-mono">
               Szeroka oferta świeżych wyrobów u Ciszków (Livia) - idealna po dniu pełnym zwiedzania
@@ -331,6 +337,9 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               alt="domowe śledzie wędzarnia Niechorze" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
+              loading="lazy"
+              width={800}
+              height={450}
             />
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 text-white text-xs font-mono">
               Domowe marynaty i tradycyjne sposoby przygotowania śledzi w Livii
@@ -632,6 +641,9 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
                   alt={INITIAL_POSTS[0].title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
+                  width={500}
+                  height={400}
                 />
                 <span className="absolute top-4 left-4 bg-amber text-white font-mono text-xs uppercase tracking-wider px-3 py-1 rounded-sm shadow-md">
                   Wyróżnione
@@ -685,6 +697,9 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
                         alt={post.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
+                        loading="lazy"
+                        width={400}
+                        height={192}
                       />
                     </div>
                     <div className="p-6">
