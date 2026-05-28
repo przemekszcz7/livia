@@ -172,6 +172,7 @@ export default function MenuPage({ onBackToHome }: MenuPageProps) {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                     loading="lazy"
+                    decoding="async"
                     width={380}
                     height={192}
                   />
