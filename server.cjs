@@ -52,7 +52,8 @@ async function startServer() {
       res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     }
   }));
-  if (process.env.NODE_ENV !== "production") {
+  const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev";
+  if (isDev) {
     const vite = await (0, import_vite.createServer)({
       server: { middlewareMode: true },
       appType: "spa"
