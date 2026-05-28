@@ -172,6 +172,8 @@ export default function MenuPage({ onBackToHome }: MenuPageProps) {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                     loading="lazy"
+                    width={380}
+                    height={192}
                   />
                   <div className="absolute top-3 left-3 bg-amber text-brown font-mono font-bold text-[10px] px-2 py-1 rounded-sm uppercase tracking-wider">
                     Polecane
