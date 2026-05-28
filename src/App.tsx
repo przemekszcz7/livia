@@ -196,6 +196,7 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const [currentHash, setCurrentHash] = useState(() => window.location.hash);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [visibleProducts, setVisibleProducts] = useState(4);
 
   // Derive page and slug states based on pathname
   let currentPage: 'home' | 'blog' | 'menu' = 'home';
@@ -540,7 +541,7 @@ export default function App() {
           </header>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-            {PRODUCTS.map((item, idx) => (
+            {PRODUCTS.slice(0, visibleProducts).map((item, idx) => (
               <motion.div 
                 key={item.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -577,6 +578,21 @@ export default function App() {
               </motion.div>
             ))}
           </div>
+
+          {/* Show More Products Button */}
+          {visibleProducts < PRODUCTS.length && (
+            <div className="mt-12 text-center relative z-10">
+              <button
+                type="button"
+                onClick={() => setVisibleProducts(PRODUCTS.length)}
+                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-brown text-brown hover:bg-brown hover:text-text-light font-display text-lg rounded-sm transition-soft shadow-md hover:scale-105 focus:outline-none focus:ring-4 focus:ring-brown/30 font-bold cursor-pointer"
+                title="Rozwiń pełną ofertę rzemieślniczych wyrobów"
+              >
+                Pokaż wszystkie specjały ({PRODUCTS.length - visibleProducts} więcej)
+                <ChevronDown size={20} className="animate-bounce" />
+              </button>
+            </div>
+          )}
 
           {/* --- Button: view full menu --- */}
           <div className="mt-20 text-center relative z-10">
