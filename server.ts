@@ -11,6 +11,29 @@ async function startServer() {
   // Enable fast response compression (Gzip/Deflate) for all API endpoints & static files
   app.use(compression());
 
+  // Global middleware to guarantee long-term browser caching (1 year) for all hashed assets & static files
+  app.use((req, res, next) => {
+    const url = req.path;
+    if (
+      url.startsWith("/assets/") || 
+      url.startsWith("/images/") || 
+      url.includes("main-") || 
+      url.endsWith(".js") || 
+      url.endsWith(".css") || 
+      url.endsWith(".woff") || 
+      url.endsWith(".woff2") || 
+      url.endsWith(".ttf") || 
+      url.endsWith(".png") || 
+      url.endsWith(".jpg") || 
+      url.endsWith(".jpeg") || 
+      url.endsWith(".webp") || 
+      url.endsWith(".svg")
+    ) {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
+    next();
+  });
+
   // Add a simple health check API endpoint
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
