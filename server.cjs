@@ -76,10 +76,14 @@ async function startServer() {
     } catch (err) {
       console.error("Failed to parse index.html for preloading:", err.message);
     }
-    app.use("/assets", (req, res, next) => {
-      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-      next();
-    });
+    app.use("/assets", import_express.default.static(import_path.default.join(distPath, "assets"), {
+      maxAge: 31536e6,
+      immutable: true,
+      etag: true,
+      setHeaders: (res) => {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      }
+    }));
     app.use(import_express.default.static(distPath, {
       maxAge: 31536e6,
       // 1 year in milliseconds
