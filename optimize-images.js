@@ -24,20 +24,56 @@ if (!fs.existsSync(imagesDir)) {
 
 console.log('--- Starting Image Optimizer & WebP Converter ---');
 
-// Download favicon
-const faviconPath = path.join(process.cwd(), 'public', 'favicon.jpg');
+// Download and optimize favicon into various standards-compliant formats and sizes
+const originalFaviconUrl = 'https://i.ibb.co/LddzVcQQ/favicon.jpg';
 try {
   console.log('Downloading favicon...');
-  const res = await fetch('https://i.ibb.co/LddzVcQQ/favicon.jpg');
+  const res = await fetch(originalFaviconUrl);
   if (res.ok) {
     const buffer = Buffer.from(await res.arrayBuffer());
-    fs.writeFileSync(faviconPath, buffer);
-    console.log(' ✅ Favicon saved successfully inside public/favicon.jpg');
+    
+    // 1. Save original as favicon.jpg (fallback)
+    fs.writeFileSync(path.join(process.cwd(), 'public', 'favicon.jpg'), buffer);
+    console.log(' ✅ Original favicon saved successfully as public/favicon.jpg');
+
+    // 2. Generate standard 1:1 ratio square sizes using Sharp
+    // Search engines (especially Google) REQUIRE some multiples of 48px (48x48, 96x96, 144x144, 192x192)
+    const sizes = {
+      'favicon-32x32.png': 32,
+      'favicon-48x48.png': 48, // Google's preferred base size
+      'favicon-96x96.png': 96,
+      'favicon-144x144.png': 144,
+      'favicon-192x192.png': 192,
+      'apple-touch-icon.png': 180, // Apple Devices iOS touch icon
+      'favicon.png': 96 // Default generic fallback PNG
+    };
+
+    for (const [filename, size] of Object.entries(sizes)) {
+      const outputPath = path.join(process.cwd(), 'public', filename);
+      await sharp(buffer)
+        .resize(size, size, {
+          fit: 'cover',
+          position: 'center'
+        })
+        .png({ compressionLevel: 9, quality: 85 })
+        .toFile(outputPath);
+      console.log(` ✅ Generated square favicon: public/${filename} (${size}x${size} px)`);
+    }
+
+    // 3. Generate canonical favicon.ico (which browsers and search engine bots crawl by default at root)
+    // We render it as a perfectly crisp, optimized 48x48 PNG with .ico extension
+    const icoPath = path.join(process.cwd(), 'public', 'favicon.ico');
+    await sharp(buffer)
+      .resize(48, 48, { fit: 'cover', position: 'center' })
+      .png({ compressionLevel: 9, quality: 85 })
+      .toFile(icoPath);
+    console.log(' ✅ Generated root favicon.ico (48x48 pixel PNG format)');
+
   } else {
-    console.warn('❌ Failed to download favicon');
+    console.warn('❌ Failed to download original favicon file');
   }
 } catch (err) {
-  console.error('❌ Failed to save favicon:', err.message);
+  console.error('❌ Failed to process and resize favicons:', err.message);
 }
 
 for (const [name, url] of Object.entries(IMAGES_MAP)) {
