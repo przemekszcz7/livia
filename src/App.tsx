@@ -557,6 +557,7 @@ export default function App() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 will-change-transform"
                       referrerPolicy="no-referrer"
                       loading="lazy"
+                      decoding="async"
                       width={380}
                       height={288}
                     />
