@@ -37,12 +37,20 @@ async function startServer() {
   const distImagesPath = import_path.default.join(process.cwd(), "dist", "images");
   const publicImagesPath = import_path.default.join(process.cwd(), "public", "images");
   app.use("/images", import_express.default.static(distImagesPath, {
-    maxAge: "1d",
-    etag: true
+    maxAge: 31536e6,
+    // 1 year in milliseconds
+    etag: true,
+    setHeaders: (res) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
   }));
   app.use("/images", import_express.default.static(publicImagesPath, {
-    maxAge: "1d",
-    etag: true
+    maxAge: 31536e6,
+    // 1 year in milliseconds
+    etag: true,
+    setHeaders: (res) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
   }));
   if (process.env.NODE_ENV !== "production") {
     const vite = await (0, import_vite.createServer)({
@@ -68,9 +76,13 @@ async function startServer() {
     } catch (err) {
       console.error("Failed to parse index.html for preloading:", err.message);
     }
+    app.use("/assets", (req, res, next) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      next();
+    });
     app.use(import_express.default.static(distPath, {
-      maxAge: "1y",
-      // default fallback of 1 year for static assets
+      maxAge: 31536e6,
+      // 1 year in milliseconds
       etag: true,
       setHeaders: (res, filePath) => {
         if (filePath.endsWith(".html")) {
