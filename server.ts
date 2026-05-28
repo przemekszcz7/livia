@@ -69,11 +69,15 @@ async function startServer() {
       console.error("Failed to parse index.html for preloading:", err.message);
     }
     
-    // Explicit middleware for /assets to guarantee immutable long-term caching
-    app.use("/assets", (req, res, next) => {
-      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-      next();
-    });
+    // Explicit static serving of /assets folder with optimized long-term immutable headers
+    app.use("/assets", express.static(path.join(distPath, "assets"), {
+      maxAge: 31536000000,
+      immutable: true,
+      etag: true,
+      setHeaders: (res) => {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      }
+    }));
 
     // Serve static files with efficient Cache-Control headers for long-term browser caching
     app.use(express.static(distPath, {
