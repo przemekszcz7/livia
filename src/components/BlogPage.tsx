@@ -58,6 +58,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
               loading="lazy"
+              decoding="async"
               width={800}
               height={450}
             />
@@ -197,6 +198,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
               loading="lazy"
+              decoding="async"
               width={800}
               height={450}
             />
@@ -338,6 +340,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
               loading="lazy"
+              decoding="async"
               width={800}
               height={450}
             />
@@ -642,6 +645,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
                   loading="lazy"
+                  decoding="async"
                   width={500}
                   height={400}
                 />
@@ -698,6 +702,7 @@ export default function BlogPage({ onBackToHome, selectedArticleSlug, setSelecte
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         referrerPolicy="no-referrer"
                         loading="lazy"
+                        decoding="async"
                         width={400}
                         height={192}
                       />
