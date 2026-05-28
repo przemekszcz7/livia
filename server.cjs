@@ -33,9 +33,54 @@ async function startServer() {
   app.use((0, import_compression.default)());
   app.use((req, res, next) => {
     const url = req.path;
-    if (url.startsWith("/assets/") || url.startsWith("/images/") || url.includes("main-") || url.endsWith(".js") || url.endsWith(".css") || url.endsWith(".woff") || url.endsWith(".woff2") || url.endsWith(".ttf") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".webp") || url.endsWith(".svg")) {
-      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-    }
+    const isStaticAsset = url.startsWith("/assets/") || url.startsWith("/images/") || url.includes("main-") || url.endsWith(".js") || url.endsWith(".css") || url.endsWith(".woff") || url.endsWith(".woff2") || url.endsWith(".ttf") || url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".webp") || url.endsWith(".svg") || url.endsWith(".ico") || url.endsWith(".png");
+    const isHtml = url.endsWith(".html") || url === "/" || url === "/blog" || url === "/menu";
+    const originalSetHeader = res.setHeader;
+    res.setHeader = function(name, value) {
+      if (name.toLowerCase() === "cache-control") {
+        if (isStaticAsset) {
+          return originalSetHeader.call(this, "Cache-Control", "public, max-age=31536000, immutable");
+        }
+        if (isHtml) {
+          return originalSetHeader.call(this, "Cache-Control", "public, max-age=0, must-revalidate");
+        }
+      }
+      return originalSetHeader.call(this, name, value);
+    };
+    const originalWriteHead = res.writeHead;
+    res.writeHead = function(statusCode, ...args) {
+      let headers = args[0] || args[1];
+      if (headers && typeof headers === "object") {
+        const keys = Object.keys(headers);
+        const hasCacheControl = keys.some((k) => k.toLowerCase() === "cache-control");
+        if (isStaticAsset) {
+          for (const key of keys) {
+            if (key.toLowerCase() === "cache-control") {
+              headers[key] = "public, max-age=31536000, immutable";
+            }
+          }
+          if (!hasCacheControl) {
+            headers["Cache-Control"] = "public, max-age=31536000, immutable";
+          }
+        } else if (isHtml) {
+          for (const key of keys) {
+            if (key.toLowerCase() === "cache-control") {
+              headers[key] = "public, max-age=0, must-revalidate";
+            }
+          }
+          if (!hasCacheControl) {
+            headers["Cache-Control"] = "public, max-age=0, must-revalidate";
+          }
+        }
+      } else {
+        if (isStaticAsset) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        } else if (isHtml) {
+          res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+        }
+      }
+      return originalWriteHead.apply(this, [statusCode, ...args]);
+    };
     next();
   });
   app.get("/api/health", (req, res) => {
