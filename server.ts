@@ -21,13 +21,19 @@ async function startServer() {
   const publicImagesPath = path.join(process.cwd(), "public", "images");
 
   app.use("/images", express.static(distImagesPath, {
-    maxAge: "1d",
-    etag: true
+    maxAge: 31536000000, // 1 year in milliseconds
+    etag: true,
+    setHeaders: (res) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
   }));
 
   app.use("/images", express.static(publicImagesPath, {
-    maxAge: "1d",
-    etag: true
+    maxAge: 31536000000, // 1 year in milliseconds
+    etag: true,
+    setHeaders: (res) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+    }
   }));
 
   // Integrate Vite middleware or serve static files with optimized Cache-Control headers
@@ -63,9 +69,15 @@ async function startServer() {
       console.error("Failed to parse index.html for preloading:", err.message);
     }
     
+    // Explicit middleware for /assets to guarantee immutable long-term caching
+    app.use("/assets", (req, res, next) => {
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      next();
+    });
+
     // Serve static files with efficient Cache-Control headers for long-term browser caching
     app.use(express.static(distPath, {
-      maxAge: "1y", // default fallback of 1 year for static assets
+      maxAge: 31536000000, // 1 year in milliseconds
       etag: true,
       setHeaders: (res, filePath) => {
         if (filePath.endsWith(".html")) {
