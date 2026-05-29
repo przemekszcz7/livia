@@ -84,14 +84,37 @@ async function startServer() {
 
     try {
       console.log("Fetching live Google reviews for Place ID:", placeId);
-      const googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
+      let activePlaceId = placeId;
+      let googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
       
-      const response = await fetch(googleUrl);
-      const data: any = await response.json();
+      let response = await fetch(googleUrl);
+      let data: any = await response.json();
 
       console.log("Google Places API Response Status:", data.status);
       if (data.error_message) {
         console.log("Google Places API Error Message:", data.error_message);
+      }
+
+      // Self-healing: If the configured Place ID returned INVALID_REQUEST, NOT_FOUND, or is invalid, perform text search
+      if (data.status === "INVALID_REQUEST" || data.status === "NOT_FOUND" || data.status === "NOT_FOUND_OR_NOT_VALID") {
+        console.warn(`Place ID "${activePlaceId}" returned status "${data.status}". Performing backend self-healing Place ID text search...`);
+        const searchInput = encodeURIComponent("Livia Smażalnia i Wędzarnia Ryb Niechorze");
+        const searchUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchInput}&inputtype=textquery&fields=place_id&key=${apiKey.trim()}`;
+        
+        try {
+          const searchRep = await fetch(searchUrl);
+          const searchData: any = await searchRep.json();
+          console.log("Dynamic Places search status:", searchData.status);
+          if (searchData.status === "OK" && searchData.candidates && searchData.candidates[0]?.place_id) {
+            activePlaceId = searchData.candidates[0].place_id;
+            console.log(`Self-healing succeeded! Resolved new current Place ID: ${activePlaceId}. Re-fetching details...`);
+            googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
+            response = await fetch(googleUrl);
+            data = await response.json();
+          }
+        } catch (searchErr: any) {
+          console.error("Backend self-healing lookup failed:", searchErr.message);
+        }
       }
 
       if (data.status === "OK" && data.result) {
