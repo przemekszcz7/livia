@@ -269,12 +269,12 @@ export default function App() {
         }
       })
       .catch(err => {
-        console.warn("Relative /api/reviews failed or returned 404, attempting Cloud Run production backend fallback:", err);
-        // Fallback to our active Google Cloud Run Express server with CORS
-        return fetch('https://ais-pre-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/api/reviews')
+        console.warn("Relative /api/reviews failed or returned 404, attempting Cloud Run live dev backend:", err);
+        // Fallback 1: Try the active dev server which has latest server.ts + CORS headers running
+        return fetch('https://ais-dev-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/api/reviews')
           .then(res => {
             if (!res.ok) {
-              throw new Error("Cloud Run API error " + res.status);
+              throw new Error("Dev branch API error " + res.status);
             }
             return res.json();
           })
@@ -282,6 +282,22 @@ export default function App() {
             if (isMounted && data) {
               setReviewsData(data);
             }
+          })
+          .catch(devErr => {
+            console.warn("Dev branch API failed, trying pre-production shared backend:", devErr);
+            // Fallback 2: Try the shared pre-production url
+            return fetch('https://ais-pre-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/api/reviews')
+              .then(res => {
+                if (!res.ok) {
+                  throw new Error("Shared branch API error " + res.status);
+                }
+                return res.json();
+              })
+              .then(data => {
+                if (isMounted && data) {
+                  setReviewsData(data);
+                }
+              });
           })
           .catch(fallbackErr => {
             console.error("Using cached/local reviews fallback (API off-line or placeholder key):", fallbackErr);
