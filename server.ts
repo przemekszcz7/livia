@@ -20,9 +20,9 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
-  // Google Places API proxy / fallbacks for rich SEO and reviews
-  app.get("/api/reviews", async (req, res) => {
-    const FALLBACK_REVIEWS = [
+  // Google Places API integration removed. Reviews are served statically for fast, direct, offline-first reliability.
+  app.get("/api/reviews", (req, res) => {
+    const STATIC_REVIEWS = [
       {
         author_name: "Wiktor Blizniuk",
         rating: 5,
@@ -57,113 +57,12 @@ async function startServer() {
       }
     ];
 
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
-    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Place ID for Livia
-
-    console.log("Reviews API request received:");
-    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.trim().length}, starts with: ${apiKey.trim().substring(0, 4)}...)` : "");
-    console.log("- Place ID:", placeId);
-
-    const isPlaceholderKey = !apiKey || 
-      apiKey.trim() === "" || 
-      apiKey.toLowerCase().includes("your") || 
-      apiKey.toLowerCase().includes("api_key") || 
-      apiKey.toLowerCase().includes("placeholder") || 
-      apiKey.toLowerCase().includes("my_");
-
-    if (isPlaceholderKey) {
-      console.log("Using cached fallback reviews. Reason: NO_VALID_API_KEY_CONFIGURED");
-      return res.json({
-        rating: 4.9,
-        user_ratings_total: 157,
-        reviews: FALLBACK_REVIEWS,
-        isLive: false,
-        debugError: "Nie skonfigurowano klucza API (GOOGLE_PLACES_API_KEY). Wprowadź poprawny klucz w ustawieniach."
-      });
-    }
-
-    try {
-      console.log("Fetching live Google reviews for Place ID:", placeId);
-      let activePlaceId = placeId;
-      let googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
-      
-      let response = await fetch(googleUrl);
-      let data: any = await response.json();
-
-      console.log("Google Places API Response Status:", data.status);
-      if (data.error_message) {
-        console.log("Google Places API Error Message:", data.error_message);
-      }
-
-      // Self-healing: If the configured Place ID returned INVALID_REQUEST, NOT_FOUND, or is invalid, perform text search
-      if (data.status === "INVALID_REQUEST" || data.status === "NOT_FOUND" || data.status === "NOT_FOUND_OR_NOT_VALID") {
-        console.warn(`Place ID "${activePlaceId}" returned status "${data.status}". Performing backend self-healing Place ID text search...`);
-        const searchInput = encodeURIComponent("Livia Smażalnia i Wędzarnia Ryb Niechorze");
-        const searchUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchInput}&inputtype=textquery&fields=place_id&key=${apiKey.trim()}`;
-        
-        try {
-          const searchRep = await fetch(searchUrl);
-          const searchData: any = await searchRep.json();
-          console.log("Dynamic Places search status:", searchData.status);
-          if (searchData.status === "OK" && searchData.candidates && searchData.candidates[0]?.place_id) {
-            activePlaceId = searchData.candidates[0].place_id;
-            console.log(`Self-healing succeeded! Resolved new current Place ID: ${activePlaceId}. Re-fetching details...`);
-            googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
-            response = await fetch(googleUrl);
-            data = await response.json();
-          }
-        } catch (searchErr: any) {
-          console.error("Backend self-healing lookup failed:", searchErr.message);
-        }
-      }
-
-      if (data.status === "OK" && data.result) {
-        const googleReviews = (data.result.reviews || []).map((rev: any) => ({
-          author_name: rev.author_name,
-          rating: rev.rating || 5,
-          relative_time_description: rev.relative_time_description || "Niedawno",
-          profile_photo_url: rev.profile_photo_url || "",
-          text: rev.text || "",
-          source: "Google"
-        }));
-
-        console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
-
-        return res.json({
-          rating: data.result.rating || 4.9,
-          user_ratings_total: data.result.user_ratings_total || 157,
-          reviews: googleReviews,
-          isLive: true
-        });
-      } else {
-        console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
-        
-        let customDebugError = `Google Maps API zwróciło status: "${data.status}". ${data.error_message || "Upewnij się, że klucz jest poprawny, a usługa Places API i rozliczenia (billing) są włączone dla Twojego projektu."}`;
-        
-        if (data.error_message && data.error_message.toLowerCase().includes("referer restrictions")) {
-          customDebugError = `Twój klucz API Google posiada restrykcje typu "HTTP referer (witryny internetowe)". Google Places API wywoływane bezpośrednio przez nasz bezpieczny serwer (Node/Express) nie akceptuje takich kluczy. Aby to naprawić, przejdź do Google Cloud Console, wejdź w zakładkę "Dane uwierzytelniające", wybierz swój klucz i w sekcji "Ograniczenia aplikacji" zmień typ na "Brak" (Unrestricted) lub stwórz dedykowany wolny klucz dla usług serwerowych.`;
-        }
-
-        return res.json({
-          rating: 4.9,
-          user_ratings_total: 157,
-          reviews: FALLBACK_REVIEWS,
-          isLive: false,
-          googleStatus: data.status,
-          googleErrorMessage: data.error_message,
-          debugError: customDebugError
-        });
-      }
-    } catch (err: any) {
-      console.log("Failed to pull live Google Reviews:", err.message);
-      return res.json({
-        rating: 4.9,
-        user_ratings_total: 157,
-        reviews: FALLBACK_REVIEWS,
-        isLive: false,
-        debugError: `Błąd sieci podczas łączenia z Google API: ${err.message}`
-      });
-    }
+    res.json({
+      rating: 4.8,
+      user_ratings_total: 195,
+      reviews: STATIC_REVIEWS,
+      isLive: true
+    });
   });
 
   // Explicitly serve /images directory from both dist and public. Express static will fall through if not found.
