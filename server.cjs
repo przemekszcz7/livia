@@ -90,25 +90,7 @@ async function startServer() {
     try {
       console.log("Fetching live Google reviews for Place ID:", placeId);
       const googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
-      const incomingReferer = req.headers.referer || req.headers.origin || "https://ais-dev-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/";
-      let incomingOrigin = "https://ais-dev-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app";
-      if (req.headers.origin) {
-        incomingOrigin = req.headers.origin;
-      } else if (req.headers.referer) {
-        try {
-          incomingOrigin = new URL(req.headers.referer).origin;
-        } catch (e) {
-        }
-      }
-      console.log("- Outgoing Referer header:", incomingReferer);
-      console.log("- Outgoing Origin header:", incomingOrigin);
-      const response = await fetch(googleUrl, {
-        headers: {
-          "Referer": incomingReferer,
-          "Origin": incomingOrigin,
-          "User-Agent": req.headers["user-agent"] || "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-        }
-      });
+      const response = await fetch(googleUrl);
       const data = await response.json();
       console.log("Google Places API Response Status:", data.status);
       if (data.error_message) {
@@ -132,6 +114,10 @@ async function startServer() {
         });
       } else {
         console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
+        let customDebugError = `Google Maps API zwr\xF3ci\u0142o status: "${data.status}". ${data.error_message || "Upewnij si\u0119, \u017Ce klucz jest poprawny, a us\u0142uga Places API i rozliczenia (billing) s\u0105 w\u0142\u0105czone dla Twojego projektu."}`;
+        if (data.error_message && data.error_message.toLowerCase().includes("referer restrictions")) {
+          customDebugError = `Tw\xF3j klucz API Google posiada restrykcje typu "HTTP referer (witryny internetowe)". Google Places API wywo\u0142ywane bezpo\u015Brednio przez nasz bezpieczny serwer (Node/Express) nie akceptuje takich kluczy. Aby to naprawi\u0107, przejd\u017A do Google Cloud Console, wejd\u017A w zak\u0142adk\u0119 "Dane uwierzytelniaj\u0105ce", wybierz sw\xF3j klucz i w sekcji "Ograniczenia aplikacji" zmie\u0144 typ na "Brak" (Unrestricted) lub stw\xF3rz dedykowany wolny klucz dla us\u0142ug serwerowych.`;
+        }
         return res.json({
           rating: 4.9,
           user_ratings_total: 157,
@@ -139,7 +125,7 @@ async function startServer() {
           isLive: false,
           googleStatus: data.status,
           googleErrorMessage: data.error_message,
-          debugError: `Google Maps API zwr\xF3ci\u0142o status: "${data.status}". ${data.error_message || "Upewnij si\u0119, \u017Ce klucz jest poprawny, a us\u0142uga Places API i rozliczenia (billing) s\u0105 w\u0142\u0105czone dla Twojego projektu."}`
+          debugError: customDebugError
         });
       }
     } catch (err) {
