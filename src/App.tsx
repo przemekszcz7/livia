@@ -253,18 +253,31 @@ export default function App() {
   // Fetch dynamic Google and Facebook reviews from our server endpoint
   useEffect(() => {
     let isMounted = true;
+    setLoadingReviews(true);
     fetch('/api/reviews')
       .then(res => {
         if (!res.ok) throw new Error("HTTP error " + res.status);
         return res.json();
       })
       .then(data => {
-        if (isMounted && data && data.reviews && data.reviews.length > 0) {
+        if (isMounted && data) {
           setReviewsData(data);
         }
       })
       .catch(err => {
         console.log("Using cached/local reviews fallback (API off-line or placeholder key):", err);
+        if (isMounted) {
+          setReviewsData(prev => ({
+            ...prev,
+            isLive: false,
+            debugError: "Nie można połączyć się z serwerem API. Ryby i recenzje są załadowane z lokalnej pamięci podręcznej."
+          }));
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setLoadingReviews(false);
+        }
       });
     return () => { isMounted = false; };
   }, []);
@@ -772,19 +785,54 @@ export default function App() {
             <h2 className="text-5xl mb-6 text-brown">Wracacie do nas nie bez powodu</h2>
             
             {/* Google Rating Summary Banner */}
-            <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 bg-white/65 backdrop-blur-md px-6 py-4 rounded-xl border border-brown/10 shadow-sm">
-              <div className="flex items-center gap-3">
-                <span className="font-display text-4xl font-bold text-brown">{reviewsData?.rating || '4.9'}</span>
-                <div className="flex gap-0.5">
-                  {[1, 2, 3, 4, 5].map(s => (
-                    <Star key={s} className="fill-amber text-amber" size={18} />
-                  ))}
+            <div className="flex flex-col items-center justify-center gap-4">
+              <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 bg-white/65 backdrop-blur-md px-6 py-4 rounded-xl border border-brown/10 shadow-sm">
+                <div className="flex items-center gap-3">
+                  <span className="font-display text-4xl font-bold text-brown">{reviewsData?.rating || '4.9'}</span>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map(s => (
+                      <Star key={s} className="fill-amber text-amber" size={18} />
+                    ))}
+                  </div>
                 </div>
+                <div className="h-px w-10 sm:h-8 sm:w-px bg-brown/15"></div>
+                <p className="text-sm font-mono text-text-muted text-center sm:text-left">
+                  Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '157'} opinii</strong>
+                </p>
               </div>
-              <div className="h-px w-10 sm:h-8 sm:w-px bg-brown/15"></div>
-              <p className="text-sm font-mono text-text-muted text-center sm:text-left">
-                Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '157'} opinii</strong>
-              </p>
+
+              {/* Dynamic Google API Diagnostic details box */}
+              {reviewsData?.isLive === false && reviewsData?.debugError && (
+                <div className="w-full max-w-lg mt-2 text-left bg-amber/5 border border-amber/20/40 rounded-xl p-4 flex gap-3 items-start shadow-sm hover:bg-amber/10 transition-all duration-300">
+                  <div className="py-1 px-2 bg-amber/15 rounded text-amber shrink-0 mt-0.5 flex items-center justify-center">
+                    <span className="text-[10px] font-bold font-mono tracking-wider">STATUS API</span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xs font-semibold text-brown uppercase tracking-wider mb-1 font-sans">Status integracji z Google Maps</h4>
+                    <p className="text-xs text-text-muted leading-relaxed font-mono">
+                      {reviewsData.debugError}
+                    </p>
+                    
+                    {reviewsData?.googleErrorMessage?.toLowerCase().includes("referer restrictions") ? (
+                      <div className="mt-4 pt-3 border-t border-brown/10">
+                        <span className="text-xs font-semibold text-amber block mb-2 font-mono uppercase tracking-wider">Instrukcja konfiguracji klucza krok po kroku:</span>
+                        <ol className="list-decimal text-xs text-text-muted font-mono leading-relaxed space-y-2 pl-4">
+                          <li>Zaloguj się do <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer" className="text-amber underline hover:text-amber/80 font-bold">Google Cloud Console</a>.</li>
+                          <li>Przejdź do: <strong className="text-brown">Interfejsy API i usługi (APIs & Services)</strong> &rarr; <strong className="text-brown">Dane uwierzytelniające (Credentials)</strong>.</li>
+                          <li>Kliknij ikonę ołówka przy swoim kluczu API (np. <strong className="text-brown">GOOGLE_PLACES_API_KEY</strong>), aby go edytować.</li>
+                          <li>W sekcji <strong className="text-brown">Ograniczenia aplikacji (Application restrictions)</strong> wybierz opcję <strong className="text-brown">"Brak" (None)</strong> &mdash; jest to niezbędne, aby nasz bezpieczny serwer Node/Express / Cloud Run mógł odpytywać API w tle.</li>
+                          <li>W sekcji <strong className="text-brown">Ograniczenia interfejsu API (API restrictions)</strong> zaznacz <strong className="text-brown">"Ogranicz klucz" (Restrict key)</strong> i wybierz z listy wyłącznie <strong className="text-brown">"Places API"</strong> (lub "Places API (New)"). To w pełni zabezpiecza Twój klucz przed użyciem w innych usługach.</li>
+                          <li>Kliknij przycisk <strong className="text-brown">Zapisz (Save)</strong> na dole. Zmiany wejdą w życie na serwerach Google w ciągu 3-5 minut.</li>
+                        </ol>
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-amber/85 mt-2 font-mono leading-relaxed">
+                        Więcej informacji: Jeżeli dopiero co aktywowałeś projekt Google Cloud lub podpiąłeś kartę płatniczą, pełna aktywacja kluczy Google Places API może potrwać do kilku minut na serwerach Google.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
