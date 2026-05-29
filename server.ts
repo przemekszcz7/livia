@@ -3,6 +3,10 @@ import path from "path";
 import fs from "fs";
 import compression from "compression";
 import { createServer as createViteServer } from "vite";
+import dotenv from "dotenv";
+
+// Load environment variables from .env / .env.local if present
+dotenv.config();
 
 async function startServer() {
   const app = express();
@@ -57,6 +61,10 @@ async function startServer() {
     // Livia Google Places Place ID derived from link: maps.app.goo.gl/NZwZnNpTYM9v8EEc7 or custom
     const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default placeholder Place ID for Livia
 
+    console.log("Reviews API request received:");
+    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.length}, starts with: ${apiKey.substring(0, 4)}...)` : "");
+    console.log("- Place ID:", placeId);
+
     const isPlaceholderKey = !apiKey || 
       apiKey.trim() === "" || 
       apiKey.toLowerCase().includes("your") || 
@@ -71,6 +79,11 @@ async function startServer() {
         const response = await fetch(googleUrl);
         const data: any = await response.json();
 
+        console.log("Google Places API Response Status:", data.status);
+        if (data.error_message) {
+          console.log("Google Places API Error Message:", data.error_message);
+        }
+
         if (data.status === "OK" && data.result) {
           const googleReviews = (data.result.reviews || []).map((rev: any) => ({
             author_name: rev.author_name,
@@ -81,29 +94,24 @@ async function startServer() {
             source: "Google"
           }));
 
-          // Merge Google live reviews with our highly SEO optimized local reviews to guarantee keyword saturation!
-          // We always prepend or inject keyword reviews if they aren't already included in Google's live response.
-          const merged = [...googleReviews];
-          FALLBACK_REVIEWS.forEach(fallback => {
-            const exists = merged.some(m => m.text.includes(fallback.text.substring(0, 15)));
-            if (!exists && merged.length < 6) {
-              merged.push(fallback);
-            }
-          });
+          console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
 
+          // If the page succeeded to fetch from Google, return ONLY the real Google reviews!
+          // We must NOT pollute the live response with fake fallback reviews.
           return res.json({
             rating: data.result.rating || 4.9,
             user_ratings_total: data.result.user_ratings_total || 157,
-            reviews: merged
+            reviews: googleReviews
           });
         } else {
-          console.log(`Google Places API returned status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
+          console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
         }
       } catch (err: any) {
         console.log("Failed to pull live Google Reviews:", err.message);
       }
     }
 
+    console.log("Using cached fallback reviews.");
     // Dynamic fallback when Google API config is empty or throws error
     return res.json({
       rating: 4.9,
