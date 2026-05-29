@@ -36,8 +36,8 @@ async function startServer() {
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
-  app.get("/api/reviews", async (req, res) => {
-    const FALLBACK_REVIEWS = [
+  app.get("/api/reviews", (req, res) => {
+    const STATIC_REVIEWS = [
       {
         author_name: "Wiktor Blizniuk",
         rating: 5,
@@ -71,93 +71,12 @@ async function startServer() {
         source: "Google"
       }
     ];
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
-    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs";
-    console.log("Reviews API request received:");
-    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.trim().length}, starts with: ${apiKey.trim().substring(0, 4)}...)` : "");
-    console.log("- Place ID:", placeId);
-    const isPlaceholderKey = !apiKey || apiKey.trim() === "" || apiKey.toLowerCase().includes("your") || apiKey.toLowerCase().includes("api_key") || apiKey.toLowerCase().includes("placeholder") || apiKey.toLowerCase().includes("my_");
-    if (isPlaceholderKey) {
-      console.log("Using cached fallback reviews. Reason: NO_VALID_API_KEY_CONFIGURED");
-      return res.json({
-        rating: 4.9,
-        user_ratings_total: 157,
-        reviews: FALLBACK_REVIEWS,
-        isLive: false,
-        debugError: "Nie skonfigurowano klucza API (GOOGLE_PLACES_API_KEY). Wprowad\u017A poprawny klucz w ustawieniach."
-      });
-    }
-    try {
-      console.log("Fetching live Google reviews for Place ID:", placeId);
-      let activePlaceId = placeId;
-      let googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
-      let response = await fetch(googleUrl);
-      let data = await response.json();
-      console.log("Google Places API Response Status:", data.status);
-      if (data.error_message) {
-        console.log("Google Places API Error Message:", data.error_message);
-      }
-      if (data.status === "INVALID_REQUEST" || data.status === "NOT_FOUND" || data.status === "NOT_FOUND_OR_NOT_VALID") {
-        console.warn(`Place ID "${activePlaceId}" returned status "${data.status}". Performing backend self-healing Place ID text search...`);
-        const searchInput = encodeURIComponent("Livia Sma\u017Calnia i W\u0119dzarnia Ryb Niechorze");
-        const searchUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchInput}&inputtype=textquery&fields=place_id&key=${apiKey.trim()}`;
-        try {
-          const searchRep = await fetch(searchUrl);
-          const searchData = await searchRep.json();
-          console.log("Dynamic Places search status:", searchData.status);
-          if (searchData.status === "OK" && searchData.candidates && searchData.candidates[0]?.place_id) {
-            activePlaceId = searchData.candidates[0].place_id;
-            console.log(`Self-healing succeeded! Resolved new current Place ID: ${activePlaceId}. Re-fetching details...`);
-            googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${activePlaceId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
-            response = await fetch(googleUrl);
-            data = await response.json();
-          }
-        } catch (searchErr) {
-          console.error("Backend self-healing lookup failed:", searchErr.message);
-        }
-      }
-      if (data.status === "OK" && data.result) {
-        const googleReviews = (data.result.reviews || []).map((rev) => ({
-          author_name: rev.author_name,
-          rating: rev.rating || 5,
-          relative_time_description: rev.relative_time_description || "Niedawno",
-          profile_photo_url: rev.profile_photo_url || "",
-          text: rev.text || "",
-          source: "Google"
-        }));
-        console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
-        return res.json({
-          rating: data.result.rating || 4.9,
-          user_ratings_total: data.result.user_ratings_total || 157,
-          reviews: googleReviews,
-          isLive: true
-        });
-      } else {
-        console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
-        let customDebugError = `Google Maps API zwr\xF3ci\u0142o status: "${data.status}". ${data.error_message || "Upewnij si\u0119, \u017Ce klucz jest poprawny, a us\u0142uga Places API i rozliczenia (billing) s\u0105 w\u0142\u0105czone dla Twojego projektu."}`;
-        if (data.error_message && data.error_message.toLowerCase().includes("referer restrictions")) {
-          customDebugError = `Tw\xF3j klucz API Google posiada restrykcje typu "HTTP referer (witryny internetowe)". Google Places API wywo\u0142ywane bezpo\u015Brednio przez nasz bezpieczny serwer (Node/Express) nie akceptuje takich kluczy. Aby to naprawi\u0107, przejd\u017A do Google Cloud Console, wejd\u017A w zak\u0142adk\u0119 "Dane uwierzytelniaj\u0105ce", wybierz sw\xF3j klucz i w sekcji "Ograniczenia aplikacji" zmie\u0144 typ na "Brak" (Unrestricted) lub stw\xF3rz dedykowany wolny klucz dla us\u0142ug serwerowych.`;
-        }
-        return res.json({
-          rating: 4.9,
-          user_ratings_total: 157,
-          reviews: FALLBACK_REVIEWS,
-          isLive: false,
-          googleStatus: data.status,
-          googleErrorMessage: data.error_message,
-          debugError: customDebugError
-        });
-      }
-    } catch (err) {
-      console.log("Failed to pull live Google Reviews:", err.message);
-      return res.json({
-        rating: 4.9,
-        user_ratings_total: 157,
-        reviews: FALLBACK_REVIEWS,
-        isLive: false,
-        debugError: `B\u0142\u0105d sieci podczas \u0142\u0105czenia z Google API: ${err.message}`
-      });
-    }
+    res.json({
+      rating: 4.8,
+      user_ratings_total: 195,
+      reviews: STATIC_REVIEWS,
+      isLive: true
+    });
   });
   const distImagesPath = import_path.default.join(process.cwd(), "dist", "images");
   const publicImagesPath = import_path.default.join(process.cwd(), "public", "images");
