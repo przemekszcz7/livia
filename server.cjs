@@ -27,6 +27,8 @@ var import_path = __toESM(require("path"), 1);
 var import_fs = __toESM(require("fs"), 1);
 var import_compression = __toESM(require("compression"), 1);
 var import_vite = require("vite");
+var import_dotenv = __toESM(require("dotenv"), 1);
+import_dotenv.default.config();
 async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
@@ -71,6 +73,9 @@ async function startServer() {
     ];
     const apiKey = process.env.GOOGLE_PLACES_API_KEY;
     const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs";
+    console.log("Reviews API request received:");
+    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.length}, starts with: ${apiKey.substring(0, 4)}...)` : "");
+    console.log("- Place ID:", placeId);
     const isPlaceholderKey = !apiKey || apiKey.trim() === "" || apiKey.toLowerCase().includes("your") || apiKey.toLowerCase().includes("api_key") || apiKey.toLowerCase().includes("placeholder") || apiKey.toLowerCase().includes("my_");
     if (apiKey && !isPlaceholderKey) {
       try {
@@ -78,6 +83,10 @@ async function startServer() {
         const googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey}&language=pl`;
         const response = await fetch(googleUrl);
         const data = await response.json();
+        console.log("Google Places API Response Status:", data.status);
+        if (data.error_message) {
+          console.log("Google Places API Error Message:", data.error_message);
+        }
         if (data.status === "OK" && data.result) {
           const googleReviews = (data.result.reviews || []).map((rev) => ({
             author_name: rev.author_name,
@@ -87,25 +96,20 @@ async function startServer() {
             text: rev.text || "",
             source: "Google"
           }));
-          const merged = [...googleReviews];
-          FALLBACK_REVIEWS.forEach((fallback) => {
-            const exists = merged.some((m) => m.text.includes(fallback.text.substring(0, 15)));
-            if (!exists && merged.length < 6) {
-              merged.push(fallback);
-            }
-          });
+          console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
           return res.json({
             rating: data.result.rating || 4.9,
             user_ratings_total: data.result.user_ratings_total || 157,
-            reviews: merged
+            reviews: googleReviews
           });
         } else {
-          console.log(`Google Places API returned status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
+          console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
         }
       } catch (err) {
         console.log("Failed to pull live Google Reviews:", err.message);
       }
     }
+    console.log("Using cached fallback reviews.");
     return res.json({
       rating: 4.9,
       user_ratings_total: 157,
