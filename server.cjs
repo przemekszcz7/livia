@@ -53,11 +53,11 @@ async function startServer() {
         source: "Google"
       },
       {
-        author_name: "Anna Zawadzka",
+        author_name: "Wiktor Blizniuk",
         rating: 5,
         relative_time_description: "3 tygodnie temu",
         profile_photo_url: "",
-        text: "Doskona\u0142e \u015Bwie\u017Ce ryby przyprawione od serca i podane z u\u015Bmiechem! Domowy paprykarz to prawdziwe mistrzostwo \u2014 musieli\u015Bmy kupi\u0107 s\u0142oik na wynos. Najlepsza sma\u017Calnia w Niechorzu, jak\u0105 odwiedzili\u015Bmy podczas tegorocznego urlopu. Bardzo czysto i klimatycznie.",
+        text: "Bardzo smaczna i \u015Bwie\u017Ca ryba, wszystko dobrze przygotowane. Du\u017Cy wyb\xF3r ryb \u2014 w\u0119dzonych oraz z pieca, ka\u017Cdy znajdzie co\u015B dla siebie. Ceny zar\xF3wno za ryby, jak i piwo bardzo przyst\u0119pne. Obs\u0142uga uprzejma i mi\u0142a, atmosfera spokojna i przyjemna.",
         source: "Facebook"
       },
       {
@@ -130,7 +130,7 @@ async function startServer() {
       res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     }
   }));
-  const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev";
+  const isDev = process.env.NODE_ENV !== "production";
   if (isDev) {
     const vite = await (0, import_vite.createServer)({
       server: { middlewareMode: true },
