@@ -62,7 +62,7 @@ export const FULL_MENU_DATA = [
     items: [
       { name: "Gołąbki rybne w sosie pomidorowym", suffix: "delikatny farsz rybny w liściach kapusty" },
       { name: "Fishburger u Ciszków", suffix: "soczysty kawałek ryby w chrupiącej bułce z autorskimi dodatkami" },
-      { name: "Bułka ze śledziem", suffix: "klasyk znad morza z cebulką i ogórkiem" },
+      { name: "Bułka ze śledziem", suffix: "klasyk znad morza z cebulką" },
       { name: "Sałatki Śledziowe w różnych smakach", suffix: "marynowane wg tradycyjnych receptur" },
       { name: "Paprykarz (wyrób własny)", suffix: "prawdopodobnie najlepszy na polskim wybrzeżu" }
     ]
