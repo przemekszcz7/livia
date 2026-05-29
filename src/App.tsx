@@ -217,7 +217,7 @@ export default function App() {
       {
         author_name: "Wiktor Blizniuk",
         rating: 5,
-        relative_time_description: "3 tygodnie temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb — wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna.",
         source: "Facebook"
@@ -225,7 +225,7 @@ export default function App() {
       {
         author_name: "Beata Kulińska",
         rating: 5,
-        relative_time_description: "Tydzień temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Ryby wędzone,smażone pyszne ,jakość i świeżość bardzo dobra ,starannie przygotowane z pasją i zaangażowaniem .\nMiła i przyjazna gościnna atmosfera ,warto tu zajrzeć a potem z przyjemnością wracać ,bo zostaje smaczne miłe wspomnienie .\nBrawo dla właścicieli za prawdziwą ,szczerą kuchnię. Beata Kulinska",
         source: "Google"
@@ -233,15 +233,15 @@ export default function App() {
       {
         author_name: "Joanna Przybylska",
         rating: 5,
-        relative_time_description: "2 tygodnie temu",
+        relative_time_description: "",
         profile_photo_url: "",
-        text: "Rodzinna atmosfera, widać i czuć, że smażalnia jest od pokoleń! Właściciele bardzo pomocni, doradza pomogą! Widać, że znają się na rzeczy. Obsługa przemiła i slużaca pomocą znająca się na rzeczy. Polecam smażalnia na każda kieszeń i na każdego smakosza ryb! Paprykarz przepyszny, gołabki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdjęć bo zniknęło wszystko z talerzy. Czas oczekiwania jest naprawdę szybki, szybszy niż w nie jednym fast foodzie! Warto czekać!",
+        text: "Rodzinna atmosfera, widać i czuć, że smażalnia jest od pokoleń! Właśrecele bardzo pomocni, doradza pomogą! Widać, że znają się na rzeczy. Obsługa przemiła i slużaca pomocą znająca się na rzeczy. Polecam smażalnia na każda kieszeń i na każdego smakosza ryb! Paprykarz przepyszny, gołabki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdjęć bo zniknęło wszystko z talerzy. Czas oczekiwania jest naprawdę szybki, szybszy niż w nie jednym fast foodzie! Warto czekać!",
         source: "Google"
       },
       {
         author_name: "Anita Staszewska",
         rating: 5,
-        relative_time_description: "Miesiąc temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Bardzo polecam “Livia” Smażalnia i wędzarnia ryb,szaszłyk “ryby u Ciszków” TRADYCJĄ OD POKOLEŃ… — świeże ryby, świetnie doprawione i bardzo smaczne. Fishburger naprawdę rewelacyjny, soczysty i dobrze skomponowany, a gołąbki rybne to coś wyjątkowego i wartego spróbowania. Wędzone ryby pachną i smakują jak prawdziwe domowe wyroby. Do tego miła obsługa i fajny nadmorski klimat. Zdecydowanie jedno z tych miejsc, do których chce się wracać podczas pobytu w Niechorzu.",
         source: "Google"
@@ -254,9 +254,13 @@ export default function App() {
   useEffect(() => {
     let isMounted = true;
     setLoadingReviews(true);
+
+    // Try relative endpoint first (works on the Cloud Run Node server itself)
     fetch('/api/reviews')
       .then(res => {
-        if (!res.ok) throw new Error("HTTP error " + res.status);
+        if (!res.ok) {
+          throw new Error("HTTP error " + res.status);
+        }
         return res.json();
       })
       .then(data => {
@@ -265,14 +269,30 @@ export default function App() {
         }
       })
       .catch(err => {
-        console.log("Using cached/local reviews fallback (API off-line or placeholder key):", err);
-        if (isMounted) {
-          setReviewsData(prev => ({
-            ...prev,
-            isLive: false,
-            debugError: "Nie można połączyć się z serwerem API. Ryby i recenzje są załadowane z lokalnej pamięci podręcznej."
-          }));
-        }
+        console.warn("Relative /api/reviews failed or returned 404, attempting Cloud Run production backend fallback:", err);
+        // Fallback to our active Google Cloud Run Express server with CORS
+        return fetch('https://ais-pre-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/api/reviews')
+          .then(res => {
+            if (!res.ok) {
+              throw new Error("Cloud Run API error " + res.status);
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (isMounted && data) {
+              setReviewsData(data);
+            }
+          })
+          .catch(fallbackErr => {
+            console.error("Using cached/local reviews fallback (API off-line or placeholder key):", fallbackErr);
+            if (isMounted) {
+              setReviewsData(prev => ({
+                ...prev,
+                isLive: false,
+                debugError: "Nie można połączyć się z serwerem API. Opinie są załadowane z lokalnej pamięci podręcznej."
+              }));
+            }
+          });
       })
       .finally(() => {
         if (isMounted) {
@@ -885,7 +905,9 @@ export default function App() {
                       )}
                       <div>
                         <h3 className="font-bold text-sm text-brown">{rev.author_name}</h3>
-                        <p className="text-[11px] font-mono text-text-muted">{rev.relative_time_description}</p>
+                        {rev.relative_time_description && (
+                          <p className="text-[11px] font-mono text-text-muted">{rev.relative_time_description}</p>
+                        )}
                       </div>
                     </div>
                     
