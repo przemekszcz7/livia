@@ -213,37 +213,61 @@ function fetchGoogleReviewsClientSide(apiKey: string, placeId: string): Promise<
       try {
         const dummyDiv = document.createElement("div");
         const service = new (window as any).google.maps.places.PlacesService(dummyDiv);
-        service.getDetails(
-          {
-            placeId: placeId,
-            fields: ["reviews", "rating", "user_ratings_total"]
-          },
-          (place: any, status: any) => {
-            if (status === "OK" && place) {
-              const reviews: ReviewItem[] = (place.reviews || []).map((rev: any) => ({
-                author_name: rev.author_name,
-                rating: rev.rating || 5,
-                relative_time_description: "", // Keep reviews timeframe removed as requested
-                profile_photo_url: rev.profile_photo_url || "",
-                text: rev.text || "",
-                source: "Google"
-              }));
-              resolve({
-                rating: place.rating || 4.9,
-                user_ratings_total: place.user_ratings_total || 157,
-                reviews: reviews
-              });
-            } else {
-              reject(new Error("PlacesService status not OK: " + status));
+        
+        const fetchDetailsWithId = (idToUse: string) => {
+          service.getDetails(
+            {
+              placeId: idToUse,
+              fields: ["reviews", "rating", "user_ratings_total"]
+            },
+            (place: any, status: any) => {
+              if (status === "OK" && place) {
+                const reviews: ReviewItem[] = (place.reviews || []).map((rev: any) => ({
+                  author_name: rev.author_name,
+                  rating: rev.rating || 5,
+                  relative_time_description: "", // Keep reviews timeframe removed as requested
+                  profile_photo_url: rev.profile_photo_url || "",
+                  text: rev.text || "",
+                  source: "Google"
+                }));
+                resolve({
+                  rating: place.rating || 4.9,
+                  user_ratings_total: place.user_ratings_total || 157,
+                  reviews: reviews
+                });
+              } else if ((status === "INVALID_REQUEST" || status === "NOT_FOUND" || status === "ZERO_RESULTS" || status === "REQUEST_DENIED") && idToUse === placeId) {
+                // If it failed and we were using the initial Place ID, perform self-healing resolution!
+                console.warn(`Place ID "${idToUse}" failed with status "${status}". Initiating web-safe self-healing Place ID search...`);
+                
+                service.findPlaceFromQuery(
+                  {
+                    query: "Livia Smażalnia i Wędzarnia Ryb Niechorze",
+                    fields: ["place_id"]
+                  },
+                  (results: any, findStatus: any) => {
+                    if (findStatus === "OK" && results && results[0] && results[0].place_id) {
+                      const healedId = results[0].place_id;
+                      console.log(`Self-healing resolved new current Place ID: ${healedId}. Retrying reviews fetch...`);
+                      fetchDetailsWithId(healedId);
+                    } else {
+                      reject(new Error(`PlacesService getDetails failed: ${status}. Self-healing search also failed: ${findStatus}`));
+                    }
+                  }
+                );
+              } else {
+                reject(new Error("PlacesService status not OK: " + status));
+              }
             }
-          }
-        );
+          );
+        };
+
+        fetchDetailsWithId(placeId);
       } catch (err) {
         reject(err);
       }
     };
 
-    // If Google Maps script is already present is some form, execute immediately
+    // If Google Maps script is already present in some form, execute immediately
     if ((window as any).google?.maps?.places) {
       loadAndFetch();
       return;
@@ -319,6 +343,39 @@ export default function App() {
   useEffect(() => {
     let isMounted = true;
     setLoadingReviews(true);
+
+    // Check if we are hosted on a static-only provider / production custom domain with no Node server.
+    // This avoids hitting /api/reviews and generating a 404 block in the console there.
+    const isStaticProduction = typeof window !== "undefined" && 
+      window.location.hostname !== "localhost" && 
+      window.location.hostname !== "127.0.0.1" && 
+      !window.location.hostname.endsWith(".run.app");
+
+    if (isStaticProduction) {
+      console.log("Static production hosting detected. Fetching Google reviews directly client-side...");
+      const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
+      const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || (window as any).GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
+
+      if (clientApiKey && clientApiKey.trim() !== "") {
+        fetchGoogleReviewsClientSide(clientApiKey.trim(), placeId)
+          .then(clientData => {
+            if (isMounted && clientData) {
+              setReviewsData(clientData);
+            }
+          })
+          .catch(sdkErr => {
+            console.error("Direct client-side SDK PlacesDetails retrieval failed:", sdkErr);
+          })
+          .finally(() => {
+            if (isMounted) {
+              setLoadingReviews(false);
+            }
+          });
+      } else {
+        setLoadingReviews(false);
+      }
+      return () => { isMounted = false; };
+    }
 
     // Try relative API endpoint first (works natively on Node setups)
     fetch('/api/reviews')
