@@ -71,7 +71,7 @@ async function startServer() {
         source: "Google"
       }
     ];
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
     const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs";
     console.log("Reviews API request received:");
     console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.trim().length}, starts with: ${apiKey.trim().substring(0, 4)}...)` : "");
