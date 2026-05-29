@@ -57,7 +57,7 @@ async function startServer() {
       }
     ];
 
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+    const apiKey = process.env.GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
     const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Place ID for Livia
 
     console.log("Reviews API request received:");
