@@ -200,94 +200,45 @@ const FAQ_ITEMS = [
   }
 ];
 
-// High-performance client-side Google Places Reviews extractor.
-// This runs natively in the browser on ANY custom domain without CORS blockages
-// by loading the Google Maps SDK dynamically when the backend is absent.
-function fetchGoogleReviewsClientSide(apiKey: string, placeId: string): Promise<{ rating: number; user_ratings_total: number; reviews: ReviewItem[] }> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === "undefined") {
-      return reject(new Error("No window object"));
+// Statically declared, authentic customer reviews for immediate, highly performant rendering
+const STATIC_REVIEWS_DATA = {
+  rating: 4.8,
+  user_ratings_total: 195,
+  reviews: [
+    {
+      author_name: "Wiktor Blizniuk",
+      rating: 5,
+      relative_time_description: "",
+      profile_photo_url: "",
+      text: "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb — wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna.",
+      source: "Facebook"
+    },
+    {
+      author_name: "Beata Kulińska",
+      rating: 5,
+      relative_time_description: "",
+      profile_photo_url: "",
+      text: "Ryby wędzone,smażone pyszne ,jakość i świeżość bardzo dobra ,starannie przygotowane z pasją i zaangażowaniem .\nMiła i przyjazna gościnna atmosfera ,warto tu zajrzeć a potem z przyjemnością wracać ,bo zostaje smaczne miłe wspomnienie .\nBrawo dla właścicieli za prawdziwą ,szczerą kuchnię. Beata Kulinska",
+      source: "Google"
+    },
+    {
+      author_name: "Joanna Przybylska",
+      rating: 5,
+      relative_time_description: "",
+      profile_photo_url: "",
+      text: "Rodzinna atmosfera, widać i czuć, że smażalnia jest od pokoleń! Właśrecele bardzo pomocni, doradza pomogą! Widać, że znają się na rzeczy. Obsługa przemiła i slużaca pomocą znająca się na rzeczy. Polecam smażalnia na każda kieszeń i na każdego smakosza ryb! Paprykarz przepyszny, gołabki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdjęć bo zniknęło wszystko z talerzy. Czas oczekiwania jest naprawdę szybki, szybszy niż w nie jednym fast foodzie! Warto czekać!",
+      source: "Google"
+    },
+    {
+      author_name: "Anita Staszewska",
+      rating: 5,
+      relative_time_description: "",
+      profile_photo_url: "",
+      text: "Bardzo polecam “Livia” Smażalnia i wędzarnia ryb,szaszłyk “ryby u Ciszków” TRADYCJĄ OD POKOLEŃ… — świeże ryby, świetnie doprawione i bardzo smaczne. Fishburger naprawdę rewelacyjny, soczysty i dobrze skomponowany, a gołąbki rybne to coś wyjątkowego i wartego spróbowania. Wędzone ryby pachną i smakują jak prawdziwe domowe wyroby. Do tego miła obsługa i fajny nadmorski klimat. Zdecydowanie jedno z tych miejsc, do których chce się wracać podczas pobytu w Niechorzu.",
+      source: "Google"
     }
-
-    const loadAndFetch = () => {
-      try {
-        const dummyDiv = document.createElement("div");
-        const service = new (window as any).google.maps.places.PlacesService(dummyDiv);
-        
-        const fetchDetailsWithId = (idToUse: string) => {
-          service.getDetails(
-            {
-              placeId: idToUse,
-              fields: ["reviews", "rating", "user_ratings_total"]
-            },
-            (place: any, status: any) => {
-              if (status === "OK" && place) {
-                const reviews: ReviewItem[] = (place.reviews || []).map((rev: any) => ({
-                  author_name: rev.author_name,
-                  rating: rev.rating || 5,
-                  relative_time_description: "", // Keep reviews timeframe removed as requested
-                  profile_photo_url: rev.profile_photo_url || "",
-                  text: rev.text || "",
-                  source: "Google"
-                }));
-                resolve({
-                  rating: place.rating || 4.9,
-                  user_ratings_total: place.user_ratings_total || 157,
-                  reviews: reviews
-                });
-              } else if ((status === "INVALID_REQUEST" || status === "NOT_FOUND" || status === "ZERO_RESULTS" || status === "REQUEST_DENIED") && idToUse === placeId) {
-                // If it failed and we were using the initial Place ID, perform self-healing resolution!
-                console.warn(`Place ID "${idToUse}" failed with status "${status}". Initiating web-safe self-healing Place ID search...`);
-                
-                service.findPlaceFromQuery(
-                  {
-                    query: "Livia Smażalnia i Wędzarnia Ryb Niechorze",
-                    fields: ["place_id"]
-                  },
-                  (results: any, findStatus: any) => {
-                    if (findStatus === "OK" && results && results[0] && results[0].place_id) {
-                      const healedId = results[0].place_id;
-                      console.log(`Self-healing resolved new current Place ID: ${healedId}. Retrying reviews fetch...`);
-                      fetchDetailsWithId(healedId);
-                    } else {
-                      reject(new Error(`PlacesService getDetails failed: ${status}. Self-healing search also failed: ${findStatus}`));
-                    }
-                  }
-                );
-              } else {
-                reject(new Error("PlacesService status not OK: " + status));
-              }
-            }
-          );
-        };
-
-        fetchDetailsWithId(placeId);
-      } catch (err) {
-        reject(err);
-      }
-    };
-
-    // If Google Maps script is already present in some form, execute immediately
-    if ((window as any).google?.maps?.places) {
-      loadAndFetch();
-      return;
-    }
-
-    const scriptId = "google-places-bootstrap-script";
-    let script = document.getElementById(scriptId) as HTMLScriptElement;
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
-
-    script.addEventListener("load", loadAndFetch);
-    script.addEventListener("error", (err) => reject(new Error("Script loading error")));
-  });
-}
+  ]
+};
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -295,128 +246,9 @@ export default function App() {
   const [currentHash, setCurrentHash] = useState(() => window.location.hash);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
-  const [reviewsData, setReviewsData] = useState<{
-    rating: number;
-    user_ratings_total: number;
-    reviews: ReviewItem[];
-  }>({
-    rating: 4.9,
-    user_ratings_total: 157,
-    reviews: [
-      {
-        author_name: "Wiktor Blizniuk",
-        rating: 5,
-        relative_time_description: "",
-        profile_photo_url: "",
-        text: "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb — wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna.",
-        source: "Facebook"
-      },
-      {
-        author_name: "Beata Kulińska",
-        rating: 5,
-        relative_time_description: "",
-        profile_photo_url: "",
-        text: "Ryby wędzone,smażone pyszne ,jakość i świeżość bardzo dobra ,starannie przygotowane z pasją i zaangażowaniem .\nMiła i przyjazna gościnna atmosfera ,warto tu zajrzeć a potem z przyjemnością wracać ,bo zostaje smaczne miłe wspomnienie .\nBrawo dla właścicieli za prawdziwą ,szczerą kuchnię. Beata Kulinska",
-        source: "Google"
-      },
-      {
-        author_name: "Joanna Przybylska",
-        rating: 5,
-        relative_time_description: "",
-        profile_photo_url: "",
-        text: "Rodzinna atmosfera, widać i czuć, że smażalnia jest od pokoleń! Właśrecele bardzo pomocni, doradza pomogą! Widać, że znają się na rzeczy. Obsługa przemiła i slużaca pomocą znająca się na rzeczy. Polecam smażalnia na każda kieszeń i na każdego smakosza ryb! Paprykarz przepyszny, gołabki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdjęć bo zniknęło wszystko z talerzy. Czas oczekiwania jest naprawdę szybki, szybszy niż w nie jednym fast foodzie! Warto czekać!",
-        source: "Google"
-      },
-      {
-        author_name: "Anita Staszewska",
-        rating: 5,
-        relative_time_description: "",
-        profile_photo_url: "",
-        text: "Bardzo polecam “Livia” Smażalnia i wędzarnia ryb,szaszłyk “ryby u Ciszków” TRADYCJĄ OD POKOLEŃ… — świeże ryby, świetnie doprawione i bardzo smaczne. Fishburger naprawdę rewelacyjny, soczysty i dobrze skomponowany, a gołąbki rybne to coś wyjątkowego i wartego spróbowania. Wędzone ryby pachną i smakują jak prawdziwe domowe wyroby. Do tego miła obsługa i fajny nadmorski klimat. Zdecydowanie jedno z tych miejsc, do których chce się wracać podczas pobytu w Niechorzu.",
-        source: "Google"
-      }
-    ]
-  });
-  const [loadingReviews, setLoadingReviews] = useState(false);
+  const [reviewsData] = useState(STATIC_REVIEWS_DATA);
+  const loadingReviews = false;
 
-  // Fetch dynamic Google and Facebook reviews from our server endpoint
-  useEffect(() => {
-    let isMounted = true;
-    setLoadingReviews(true);
-
-    // Check if we are hosted on a static-only provider / production custom domain with no Node server.
-    // This avoids hitting /api/reviews and generating a 404 block in the console there.
-    const isStaticProduction = typeof window !== "undefined" && 
-      window.location.hostname !== "localhost" && 
-      window.location.hostname !== "127.0.0.1" && 
-      !window.location.hostname.endsWith(".run.app");
-
-    if (isStaticProduction) {
-      console.log("Static production hosting detected. Fetching Google reviews directly client-side...");
-      const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
-      const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || (window as any).GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
-
-      if (clientApiKey && clientApiKey.trim() !== "") {
-        fetchGoogleReviewsClientSide(clientApiKey.trim(), placeId)
-          .then(clientData => {
-            if (isMounted && clientData) {
-              setReviewsData(clientData);
-            }
-          })
-          .catch(sdkErr => {
-            console.error("Direct client-side SDK PlacesDetails retrieval failed:", sdkErr);
-          })
-          .finally(() => {
-            if (isMounted) {
-              setLoadingReviews(false);
-            }
-          });
-      } else {
-        setLoadingReviews(false);
-      }
-      return () => { isMounted = false; };
-    }
-
-    // Try relative API endpoint first (works natively on Node setups)
-    fetch('/api/reviews')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error("Local reviews route returned " + res.status);
-        }
-        return res.json();
-      })
-      .then(data => {
-        if (isMounted && data) {
-          setReviewsData(data);
-        }
-      })
-      .catch(localErr => {
-        console.warn("Relative /api/reviews failed (expected on static pure-frontend deployments):", localErr);
-
-        // Fallback: Check if there is an active client-side Google Places key defined (fallback to user's provided production key)
-        const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
-        const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || (window as any).GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
-
-        if (clientApiKey && clientApiKey.trim() !== "") {
-          console.log("Triggering client-side secure SDK fetch for Google reviews...");
-          return fetchGoogleReviewsClientSide(clientApiKey.trim(), placeId)
-            .then(clientData => {
-              if (isMounted && clientData) {
-                setReviewsData(clientData);
-              }
-            })
-            .catch(sdkErr => {
-              console.error("Client-side SDK PlacesDetails retrieval failed:", sdkErr);
-            });
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setLoadingReviews(false);
-        }
-      });
-    return () => { isMounted = false; };
-  }, []);
 
   // Derive page and slug states based on pathname
   let currentPage: 'home' | 'blog' | 'menu' = 'home';
@@ -924,7 +756,7 @@ export default function App() {
             <div className="flex flex-col items-center justify-center gap-4">
               <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 bg-white/65 backdrop-blur-md px-6 py-4 rounded-xl border border-brown/10 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <span className="font-display text-4xl font-bold text-brown">{reviewsData?.rating || '4.9'}</span>
+                  <span className="font-display text-4xl font-bold text-brown">{reviewsData?.rating || '4.8'}</span>
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map(s => (
                       <Star key={s} className="fill-amber text-amber" size={18} />
@@ -933,7 +765,7 @@ export default function App() {
                 </div>
                 <div className="h-px w-10 sm:h-8 sm:w-px bg-brown/15"></div>
                 <p className="text-sm font-mono text-text-muted text-center sm:text-left">
-                  Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '157'} opinii</strong>
+                  Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '195'} opinii</strong>
                 </p>
               </div>
 
