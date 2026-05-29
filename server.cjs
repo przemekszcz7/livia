@@ -33,15 +33,6 @@ async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
   app.use((0, import_compression.default)());
-  app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(200);
-    }
-    next();
-  });
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
