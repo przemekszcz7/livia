@@ -39,22 +39,6 @@ async function startServer() {
   app.get("/api/reviews", async (req, res) => {
     const FALLBACK_REVIEWS = [
       {
-        author_name: "Kamil Wi\u015Bniewski",
-        rating: 5,
-        relative_time_description: "Tydzie\u0144 temu",
-        profile_photo_url: "",
-        text: "Bez w\u0105tpienia najlepsza sma\u017Calnia w Niechorzu! Ryby s\u0105 niesamowicie \u015Bwie\u017Ce, a nasza ulubiona sola i dorsz po prostu rozp\u0142ywa\u0142y si\u0119 w ustach. Do tego w\u0119dzarnia na miejscu oferuje genialne w\u0119dzone ryby prosto z dymu. Na pewno wr\xF3cimy!",
-        source: "Google"
-      },
-      {
-        author_name: "Marek Kowalski",
-        rating: 5,
-        relative_time_description: "2 tygodnie temu",
-        profile_photo_url: "",
-        text: "Bardzo smaczna ryba, wszystko \u015Bwietnie przygotowane. Sma\u017Calnia Livia u Ciszk\xF3w to klasa sama w sobie. Ich tradycyjna w\u0119dzarnia Niechorze serwuje rewelacyjnego halibuta i w\u0119gorza. Obs\u0142uga jest niesamowicie mi\u0142a, a klimat sielski. Polecam!",
-        source: "Google"
-      },
-      {
         author_name: "Wiktor Blizniuk",
         rating: 5,
         relative_time_description: "3 tygodnie temu",
@@ -63,11 +47,27 @@ async function startServer() {
         source: "Facebook"
       },
       {
-        author_name: "Piotr R.",
+        author_name: "Beata Kuli\u0144ska",
+        rating: 5,
+        relative_time_description: "Tydzie\u0144 temu",
+        profile_photo_url: "",
+        text: "Ryby w\u0119dzone,sma\u017Cone pyszne ,jako\u015B\u0107 i \u015Bwie\u017Co\u015B\u0107 bardzo dobra ,starannie przygotowane z pasj\u0105 i zaanga\u017Cowaniem .\nMi\u0142a i przyjazna go\u015Bcinna atmosfera ,warto tu zajrze\u0107 a potem z przyjemno\u015Bci\u0105 wraca\u0107 ,bo zostaje smaczne mi\u0142e wspomnienie .\nBrawo dla w\u0142a\u015Bcicieli za prawdziw\u0105 ,szczer\u0105 kuchni\u0119. Beata Kulinska",
+        source: "Google"
+      },
+      {
+        author_name: "Joanna Przybylska",
+        rating: 5,
+        relative_time_description: "2 tygodnie temu",
+        profile_photo_url: "",
+        text: "Rodzinna atmosfera, wida\u0107 i czu\u0107, \u017Ce sma\u017Calnia jest od pokole\u0144! W\u0142a\u015Bciciele bardzo pomocni, doradza pomog\u0105! Wida\u0107, \u017Ce znaj\u0105 si\u0119 na rzeczy. Obs\u0142uga przemi\u0142a i slu\u017Caca pomoc\u0105 znaj\u0105ca si\u0119 na rzeczy. Polecam sma\u017Calnia na ka\u017Cda kiesze\u0144 i na ka\u017Cdego smakosza ryb! Paprykarz przepyszny, go\u0142abki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdj\u0119\u0107 bo znikn\u0119\u0142o wszystko z talerzy. Czas oczekiwania jest naprawd\u0119 szybki, szybszy ni\u017C w nie jednym fast foodzie! Warto czeka\u0107!",
+        source: "Google"
+      },
+      {
+        author_name: "Anita Staszewska",
         rating: 5,
         relative_time_description: "Miesi\u0105c temu",
         profile_photo_url: "",
-        text: "Wspania\u0142a rodzinna w\u0119dzarnia i sma\u017Calnia ryb w Niechorzu. Ryby \u015Bwie\u017Ce, nieprzesuszone, pyszna chrupi\u0105ca panierka. W\u0119dzony \u0142oso\u015B i pstr\u0105g kupione na kolacj\u0119 pachnia\u0142y olchowym dymem w ca\u0142ym pokoju. Obowi\u0105zkowy punkt gastronomiczny nad Ba\u0142tykiem!",
+        text: "Bardzo polecam \u201CLivia\u201D Sma\u017Calnia i w\u0119dzarnia ryb,szasz\u0142yk \u201Cryby u Ciszk\xF3w\u201D TRADYCJ\u0104 OD POKOLE\u0143\u2026 \u2014 \u015Bwie\u017Ce ryby, \u015Bwietnie doprawione i bardzo smaczne. Fishburger naprawd\u0119 rewelacyjny, soczysty i dobrze skomponowany, a go\u0142\u0105bki rybne to co\u015B wyj\u0105tkowego i wartego spr\xF3bowania. W\u0119dzone ryby pachn\u0105 i smakuj\u0105 jak prawdziwe domowe wyroby. Do tego mi\u0142a obs\u0142uga i fajny nadmorski klimat. Zdecydowanie jedno z tych miejsc, do kt\xF3rych chce si\u0119 wraca\u0107 podczas pobytu w Niechorzu.",
         source: "Google"
       }
     ];
