@@ -58,11 +58,10 @@ async function startServer() {
     ];
 
     const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-    // Livia Google Places Place ID derived from link: maps.app.goo.gl/NZwZnNpTYM9v8EEc7 or custom
-    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default placeholder Place ID for Livia
+    const placeId = process.env.GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Place ID for Livia
 
     console.log("Reviews API request received:");
-    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.length}, starts with: ${apiKey.substring(0, 4)}...)` : "");
+    console.log("- Key present:", !!apiKey, apiKey ? `(length: ${apiKey.trim().length}, starts with: ${apiKey.trim().substring(0, 4)}...)` : "");
     console.log("- Place ID:", placeId);
 
     const isPlaceholderKey = !apiKey || 
@@ -72,52 +71,89 @@ async function startServer() {
       apiKey.toLowerCase().includes("placeholder") || 
       apiKey.toLowerCase().includes("my_");
 
-    if (apiKey && !isPlaceholderKey) {
-      try {
-        console.log("Fetching live Google reviews for Place ID:", placeId);
-        const googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey}&language=pl`;
-        const response = await fetch(googleUrl);
-        const data: any = await response.json();
-
-        console.log("Google Places API Response Status:", data.status);
-        if (data.error_message) {
-          console.log("Google Places API Error Message:", data.error_message);
-        }
-
-        if (data.status === "OK" && data.result) {
-          const googleReviews = (data.result.reviews || []).map((rev: any) => ({
-            author_name: rev.author_name,
-            rating: rev.rating || 5,
-            relative_time_description: rev.relative_time_description || "Niedawno",
-            profile_photo_url: rev.profile_photo_url || "",
-            text: rev.text || "",
-            source: "Google"
-          }));
-
-          console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
-
-          // If the page succeeded to fetch from Google, return ONLY the real Google reviews!
-          // We must NOT pollute the live response with fake fallback reviews.
-          return res.json({
-            rating: data.result.rating || 4.9,
-            user_ratings_total: data.result.user_ratings_total || 157,
-            reviews: googleReviews
-          });
-        } else {
-          console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
-        }
-      } catch (err: any) {
-        console.log("Failed to pull live Google Reviews:", err.message);
-      }
+    if (isPlaceholderKey) {
+      console.log("Using cached fallback reviews. Reason: NO_VALID_API_KEY_CONFIGURED");
+      return res.json({
+        rating: 4.9,
+        user_ratings_total: 157,
+        reviews: FALLBACK_REVIEWS,
+        isLive: false,
+        debugError: "Nie skonfigurowano klucza API (GOOGLE_PLACES_API_KEY). Wprowadź poprawny klucz w ustawieniach."
+      });
     }
 
-    console.log("Using cached fallback reviews.");
-    // Dynamic fallback when Google API config is empty or throws error
-    return res.json({
-      rating: 4.9,
-      user_ratings_total: 157,
-      reviews: FALLBACK_REVIEWS
-    });
+    try {
+      console.log("Fetching live Google reviews for Place ID:", placeId);
+      const googleUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey.trim()}&language=pl`;
+      
+      // Forward incoming Referer and Origin headers to satísfy referer restrictions on the API Key
+      const incomingReferer = req.headers.referer || req.headers.origin || "https://ais-dev-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app/";
+      let incomingOrigin = "https://ais-dev-lgc6bjeopvko4jlv3aatpk-140455367719.europe-west1.run.app";
+      if (req.headers.origin) {
+        incomingOrigin = req.headers.origin;
+      } else if (req.headers.referer) {
+        try {
+          incomingOrigin = new URL(req.headers.referer).origin;
+        } catch (e) {}
+      }
+
+      console.log("- Outgoing Referer header:", incomingReferer);
+      console.log("- Outgoing Origin header:", incomingOrigin);
+
+      const response = await fetch(googleUrl, {
+        headers: {
+          "Referer": incomingReferer,
+          "Origin": incomingOrigin,
+          "User-Agent": req.headers["user-agent"] || "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+      });
+      const data: any = await response.json();
+
+      console.log("Google Places API Response Status:", data.status);
+      if (data.error_message) {
+        console.log("Google Places API Error Message:", data.error_message);
+      }
+
+      if (data.status === "OK" && data.result) {
+        const googleReviews = (data.result.reviews || []).map((rev: any) => ({
+          author_name: rev.author_name,
+          rating: rev.rating || 5,
+          relative_time_description: rev.relative_time_description || "Niedawno",
+          profile_photo_url: rev.profile_photo_url || "",
+          text: rev.text || "",
+          source: "Google"
+        }));
+
+        console.log(`Successfully fetched ${googleReviews.length} real Google reviews.`);
+
+        return res.json({
+          rating: data.result.rating || 4.9,
+          user_ratings_total: data.result.user_ratings_total || 157,
+          reviews: googleReviews,
+          isLive: true
+        });
+      } else {
+        console.log(`Google Places API returned non-OK status: ${data.status}. Falling back gracefully to pre-cached optimized reviews.`);
+        return res.json({
+          rating: 4.9,
+          user_ratings_total: 157,
+          reviews: FALLBACK_REVIEWS,
+          isLive: false,
+          googleStatus: data.status,
+          googleErrorMessage: data.error_message,
+          debugError: `Google Maps API zwróciło status: "${data.status}". ${data.error_message || "Upewnij się, że klucz jest poprawny, a usługa Places API i rozliczenia (billing) są włączone dla Twojego projektu."}`
+        });
+      }
+    } catch (err: any) {
+      console.log("Failed to pull live Google Reviews:", err.message);
+      return res.json({
+        rating: 4.9,
+        user_ratings_total: 157,
+        reviews: FALLBACK_REVIEWS,
+        isLive: false,
+        debugError: `Błąd sieci podczas łączenia z Google API: ${err.message}`
+      });
+    }
   });
 
   // Explicitly serve /images directory from both dist and public. Express static will fall through if not found.
