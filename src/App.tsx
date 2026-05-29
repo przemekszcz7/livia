@@ -31,48 +31,57 @@ import {
   RopeDivider 
 } from './components/NauticalDecorations';
 
+export interface ReviewItem {
+  author_name: string;
+  rating: number;
+  relative_time_description: string;
+  profile_photo_url: string;
+  text: string;
+  source: string;
+}
+
 // --- Data ---
 const PRODUCTS = [
   {
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury",
-    image: "https://i.ibb.co/Q3kM5CSs/paprykarz.jpg",
+    image: "https://i.ibb.co/RkDdvXF6/paprykarz.webp",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym",
-    image: "https://i.ibb.co/ksQ03Jzv/lososzpieca.jpg",
+    image: "https://i.ibb.co/tTYR6Vgb/lososzpieca.webp",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym",
-    image: "https://i.ibb.co/5WjSnT21/golabki.jpg",
+    image: "https://i.ibb.co/MkKQ159R/golabkirybne.webp",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym",
-    image: "https://i.ibb.co/k21V53FP/halibut.jpg",
+    image: "https://i.ibb.co/1fhJWFsB/halibut.webp",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 5,
     title: "Dorsz",
     desc: "W aromatycznym sosie Livorno",
-    image: "https://i.ibb.co/svvsngFq/dorszlivorno.jpg",
+    image: "https://i.ibb.co/M5QWjsj7/dorszlivorno.webp",
     alt: "świeży dorsz w sosie livorno - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 6,
     title: "Fishburger",
-    desc: "Soczysty kawałek ryby w chrupiącej bułce z нашимi autorskimi dodatkami",
-    image: "https://i.ibb.co/LD73r6yF/burger.jpg",
+    desc: "Soczysty kawałek ryby w chrupiącej bułce z naszymi autorskimi dodatkami",
+    image: "https://i.ibb.co/Rp55cPxT/burger.webp",
     alt: "soczysty fishburger u Ciszków - smażalnia niechorze, ryby niechorze"
   },
   {
@@ -196,6 +205,36 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(() => window.location.pathname);
   const [currentHash, setCurrentHash] = useState(() => window.location.hash);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const [reviewsData, setReviewsData] = useState<{
+    rating: number;
+    user_ratings_total: number;
+    reviews: ReviewItem[];
+  } | null>(null);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+
+  // Fetch dynamic Google and Facebook reviews from our server endpoint
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/reviews')
+      .then(res => {
+        if (!res.ok) throw new Error("HTTP error " + res.status);
+        return res.json();
+      })
+      .then(data => {
+        if (isMounted) {
+          setReviewsData(data);
+          setLoadingReviews(false);
+        }
+      })
+      .catch(err => {
+        console.error("Critical: Failed to pull reviews:", err);
+        if (isMounted) {
+          setLoadingReviews(false);
+        }
+      });
+    return () => { isMounted = false; };
+  }, []);
 
   // Derive page and slug states based on pathname
   let currentPage: 'home' | 'blog' | 'menu' = 'home';
@@ -695,64 +734,135 @@ export default function App() {
         </div>
         
         <div className="max-w-5xl mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12 border-b border-brown/10 pb-12">
             <p className="font-mono text-amber uppercase tracking-widest mb-4">— WASZYM ZDANIEM</p>
-            <h2 className="text-5xl mb-6">Wracacie do nas nie bez powodu</h2>
-            <div className="flex justify-center gap-1 mb-8">
-              {[1, 2, 3, 4, 5].map(s => <Star key={s} className="fill-amber text-amber" size={24} />)}
+            <h2 className="text-5xl mb-6 text-brown">Wracacie do nas nie bez powodu</h2>
+            
+            {/* Google Rating Summary Banner */}
+            <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 bg-white/65 backdrop-blur-md px-6 py-4 rounded-xl border border-brown/10 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-4xl font-bold text-brown">{reviewsData?.rating || '4.9'}</span>
+                <div className="flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map(s => (
+                    <Star key={s} className="fill-amber text-amber" size={18} />
+                  ))}
+                </div>
+              </div>
+              <div className="h-px w-10 sm:h-8 sm:w-px bg-brown/15"></div>
+              <p className="text-sm font-mono text-text-muted text-center sm:text-left">
+                Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '157'} opinii</strong>
+              </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white p-10 rounded-[10px] shadow-lg border-t-4 border-teal relative"
-            >
-              <Quote className="absolute top-6 right-6 text-teal opacity-10" size={64} />
-              <p className="text-lg italic mb-6 text-text relative z-10">
-                "Bardzo smaczna ryba, wszystko dobrze przygotowane. Duży wybór ryb - wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-teal-light/20 rounded-full flex items-center justify-center font-display text-teal text-xl">M</div>
-                <div>
-                  <h3 className="font-bold">Marek</h3>
-                  <p className="text-xs font-mono text-text-muted">Opinia z Facebook</p>
-                </div>
-              </div>
-            </motion.div>
+          {loadingReviews ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-3">
+              <div className="w-10 h-10 border-4 border-amber border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-sm font-mono text-text-muted">Ładowanie opinii klientów...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+              {(reviewsData?.reviews || []).map((rev, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(index * 0.1, 0.4), duration: 0.5 }}
+                  className="bg-white p-8 rounded-xl shadow-md border-t-4 relative flex flex-col justify-between"
+                  style={{ borderColor: rev.source === 'Google' ? '#D4892A' : '#2E6B6B' }}
+                >
+                  <Quote className="absolute top-6 right-6 opacity-5 text-brown" size={56} />
+                  
+                  <div>
+                    <div className="flex gap-0.5 mb-4">
+                      {Array.from({ length: rev.rating }).map((_, i) => (
+                        <Star key={i} className="fill-amber text-amber" size={16} />
+                      ))}
+                    </div>
+                    <p className="text-base italic mb-6 text-text relative z-10 font-serif leading-relaxed">
+                      "{rev.text}"
+                    </p>
+                  </div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-white p-10 rounded-[10px] shadow-lg border-t-4 border-amber relative"
-            >
-              <Quote className="absolute top-6 right-6 text-amber opacity-10" size={64} />
-              <p className="text-lg italic mb-6 text-text relative z-10">
-                "Doskonale otulone szczerością, przyprawione od serca i podane z uśmiechem przepyszne ryby."
-              </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-amber-light/20 rounded-full flex items-center justify-center font-display text-amber text-xl">A</div>
-                <div>
-                  <h3 className="font-bold">Anna Z.</h3>
-                  <p className="text-xs font-mono text-text-muted">Opinia z Facebook</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+                  <div className="flex items-center justify-between border-t border-brown/5 pt-4 mt-auto">
+                    <div className="flex items-center gap-3">
+                      {rev.profile_photo_url ? (
+                        <img 
+                          src={rev.profile_photo_url} 
+                          alt={rev.author_name} 
+                          className="w-10 h-10 rounded-full object-cover border border-brown/10" 
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div 
+                          className="w-10 h-10 rounded-full flex items-center justify-center font-display font-bold text-white text-base shadow-sm"
+                          style={{ backgroundColor: rev.source === 'Google' ? '#D4892A' : '#2E6B6B' }}
+                        >
+                          {rev.author_name.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-bold text-sm text-brown">{rev.author_name}</h3>
+                        <p className="text-[11px] font-mono text-text-muted">{rev.relative_time_description}</p>
+                      </div>
+                    </div>
+                    
+                    <span className={`text-[9px] font-mono uppercase tracking-wider px-2 py-1 rounded font-bold ${
+                      rev.source === 'Google' 
+                        ? 'bg-amber/10 text-brown' 
+                        : 'bg-teal/10 text-teal'
+                    }`}>
+                      {rev.source === 'Google' ? 'Google' : 'Facebook'}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
-          <div className="text-center mt-16">
-            <a 
-              href="https://www.facebook.com/profile.php?id=61576152080532&sk=reviews" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-brown text-brown font-display hover:bg-brown hover:text-white transition-soft"
-            >
-              Przeczytaj więcej opinii na Facebooku
-            </a>
-          </div>
+          {/* Call to Action: Encourage Reviews with Target Keyword Prompting */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="bg-white/40 border-2 border-dashed border-brown/25 rounded-2xl p-8 max-w-3xl mx-auto shadow-sm text-center relative"
+          >
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brown text-white px-5 py-2 text-xs font-mono uppercase tracking-widest rounded-full shadow-md">
+              Zostaw swoją opinię! ⭐
+            </div>
+            
+            <h3 className="text-2xl mb-4 font-display font-bold text-brown mt-4">
+              Byliście już naszymi gośćmi w Niechorzu?
+            </h3>
+            
+            <p className="text-base text-text-muted mb-6 leading-relaxed max-w-xl mx-auto font-serif">
+              Wrzucając recenzję, pomagasz innym turystom odkryć <strong className="text-brown">najlepszą smażalnię w Niechorzu</strong>! Napisz koniecznie, jak smakowały Ci nasze <strong className="text-brown">ryby</strong> smażone na miejscu, rzemieślnicza <strong className="text-brown">wędzarnia u Ciszków</strong> czy domowej roboty przetwory. Każdy komentarz ma dla nas wielkie znaczenie!
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a 
+                href="https://maps.app.goo.gl/NZwZnNpTYM9v8EEc7" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-amber text-white hover:bg-brown hover:text-white font-display font-medium transition-soft shadow-md rounded-lg text-sm uppercase tracking-wider"
+              >
+                <span>Napisz opinię na Google</span>
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                  <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-6.887 4.114-4.694 0-8.503-3.809-8.503-8.503s3.809-8.503 8.503-8.503c2.28 0 4.213.82 5.717 2.275l3.22-3.219C19.14 1.86 16.035 0 12.24 0 5.48 0 0 5.48 0 12.24s5.48 12.24 12.24 12.24c6.887 0 12.24-5.48 12.24-12.24 0-.82-.082-1.639-.246-2.455H12.24z"/>
+                </svg>
+              </a>
+              
+              <a 
+                href="https://www.facebook.com/profile.php?id=61576152080532&sk=reviews" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-brown text-brown hover:bg-brown hover:text-white font-display font-semibold transition-soft shadow-sm rounded-lg text-sm uppercase tracking-wider"
+              >
+                Opinie na Facebooku
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 
