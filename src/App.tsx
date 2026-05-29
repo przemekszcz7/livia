@@ -597,9 +597,8 @@ export default function App() {
               <motion.div 
                 key={item.id}
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08, duration: 0.5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: Math.min(idx * 0.05, 0.4), duration: 0.5 }}
                 className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(33.333%-2rem)] max-w-[380px] flex will-change-[transform,opacity]"
               >
                 <div className="group flex flex-col bg-white rounded-[10px] overflow-hidden shadow-xl border-t-[3px] border-amber w-full transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-2xl will-change-transform">
@@ -784,8 +783,7 @@ export default function App() {
                 <motion.div 
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(index * 0.1, 0.4), duration: 0.5 }}
                   className="bg-white p-8 rounded-xl shadow-md border-t-4 relative flex flex-col justify-between"
                   style={{ borderColor: rev.source === 'Google' ? '#D4892A' : '#2E6B6B' }}
@@ -844,8 +842,8 @@ export default function App() {
           {/* Call to Action: Encourage Reviews with Target Keyword Prompting */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
             className="bg-white/40 border-2 border-dashed border-brown/25 rounded-2xl p-8 max-w-3xl mx-auto shadow-sm text-center relative"
           >
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-brown text-white px-5 py-2 text-xs font-mono uppercase tracking-widest rounded-full shadow-md">
