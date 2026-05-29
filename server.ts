@@ -36,11 +36,11 @@ async function startServer() {
         source: "Google"
       },
       {
-        author_name: "Anna Zawadzka",
+        author_name: "Wiktor Blizniuk",
         rating: 5,
         relative_time_description: "3 tygodnie temu",
         profile_photo_url: "",
-        text: "Doskonałe świeże ryby przyprawione od serca i podane z uśmiechem! Domowy paprykarz to prawdziwe mistrzostwo — musieliśmy kupić słoik na wynos. Najlepsza smażalnia w Niechorzu, jaką odwiedziliśmy podczas tegorocznego urlopu. Bardzo czysto i klimatycznie.",
+        text: "Bardzo smaczna i świeża ryba, wszystko dobrze przygotowane. Duży wybór ryb — wędzonych oraz z pieca, każdy znajdzie coś dla siebie. Ceny zarówno za ryby, jak i piwo bardzo przystępne. Obsługa uprzejma i miła, atmosfera spokojna i przyjemna.",
         source: "Facebook"
       },
       {
@@ -132,8 +132,8 @@ async function startServer() {
     }
   }));
 
-  // Default to production mode. Development mode is only active when NODE_ENV is explicitly "development" or "dev"
-  const isDev = process.env.NODE_ENV === "development" || process.env.NODE_ENV === "dev";
+  // Default to development middleware unless NODE_ENV is explicitly set to production
+  const isDev = process.env.NODE_ENV !== "production";
   if (isDev) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
