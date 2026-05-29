@@ -15,17 +15,6 @@ async function startServer() {
   // Enable fast response compression (Gzip/Deflate) for all API endpoints & static files
   app.use(compression());
 
-  // Simple CORS middleware to allow fetching reviews from custom domains/environments
-  app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(200);
-    }
-    next();
-  });
-
   // Add a simple health check API endpoint
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
