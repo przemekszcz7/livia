@@ -73,7 +73,7 @@ async function startServer() {
     ];
     res.json({
       rating: 4.8,
-      user_ratings_total: 195,
+      user_ratings_total: "190+",
       reviews: STATIC_REVIEWS,
       isLive: true
     });
