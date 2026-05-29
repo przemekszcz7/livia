@@ -203,7 +203,7 @@ const FAQ_ITEMS = [
 // Statically declared, authentic customer reviews for immediate, highly performant rendering
 const STATIC_REVIEWS_DATA = {
   rating: 4.8,
-  user_ratings_total: 195,
+  user_ratings_total: "190+",
   reviews: [
     {
       author_name: "Wiktor Blizniuk",
@@ -765,7 +765,7 @@ export default function App() {
                 </div>
                 <div className="h-px w-10 sm:h-8 sm:w-px bg-brown/15"></div>
                 <p className="text-sm font-mono text-text-muted text-center sm:text-left">
-                  Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '195'} opinii</strong>
+                  Średnia ocena z Google i Facebook na podstawie <strong className="text-brown">{reviewsData?.user_ratings_total || '190+'} opinii</strong>
                 </p>
               </div>
 
