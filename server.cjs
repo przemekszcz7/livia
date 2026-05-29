@@ -33,6 +33,15 @@ async function startServer() {
   const app = (0, import_express.default)();
   const PORT = 3e3;
   app.use((0, import_compression.default)());
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") {
+      return res.sendStatus(200);
+    }
+    next();
+  });
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
@@ -41,7 +50,7 @@ async function startServer() {
       {
         author_name: "Wiktor Blizniuk",
         rating: 5,
-        relative_time_description: "3 tygodnie temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Bardzo smaczna i \u015Bwie\u017Ca ryba, wszystko dobrze przygotowane. Du\u017Cy wyb\xF3r ryb \u2014 w\u0119dzonych oraz z pieca, ka\u017Cdy znajdzie co\u015B dla siebie. Ceny zar\xF3wno za ryby, jak i piwo bardzo przyst\u0119pne. Obs\u0142uga uprzejma i mi\u0142a, atmosfera spokojna i przyjemna.",
         source: "Facebook"
@@ -49,7 +58,7 @@ async function startServer() {
       {
         author_name: "Beata Kuli\u0144ska",
         rating: 5,
-        relative_time_description: "Tydzie\u0144 temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Ryby w\u0119dzone,sma\u017Cone pyszne ,jako\u015B\u0107 i \u015Bwie\u017Co\u015B\u0107 bardzo dobra ,starannie przygotowane z pasj\u0105 i zaanga\u017Cowaniem .\nMi\u0142a i przyjazna go\u015Bcinna atmosfera ,warto tu zajrze\u0107 a potem z przyjemno\u015Bci\u0105 wraca\u0107 ,bo zostaje smaczne mi\u0142e wspomnienie .\nBrawo dla w\u0142a\u015Bcicieli za prawdziw\u0105 ,szczer\u0105 kuchni\u0119. Beata Kulinska",
         source: "Google"
@@ -57,15 +66,15 @@ async function startServer() {
       {
         author_name: "Joanna Przybylska",
         rating: 5,
-        relative_time_description: "2 tygodnie temu",
+        relative_time_description: "",
         profile_photo_url: "",
-        text: "Rodzinna atmosfera, wida\u0107 i czu\u0107, \u017Ce sma\u017Calnia jest od pokole\u0144! W\u0142a\u015Bciciele bardzo pomocni, doradza pomog\u0105! Wida\u0107, \u017Ce znaj\u0105 si\u0119 na rzeczy. Obs\u0142uga przemi\u0142a i slu\u017Caca pomoc\u0105 znaj\u0105ca si\u0119 na rzeczy. Polecam sma\u017Calnia na ka\u017Cda kiesze\u0144 i na ka\u017Cdego smakosza ryb! Paprykarz przepyszny, go\u0142abki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdj\u0119\u0107 bo znikn\u0119\u0142o wszystko z talerzy. Czas oczekiwania jest naprawd\u0119 szybki, szybszy ni\u017C w nie jednym fast foodzie! Warto czeka\u0107!",
+        text: "Rodzinna atmosfera, wida\u0107 i czu\u0107, \u017Ce sma\u017Calnia jest od pokole\u0144! W\u0142a\u015Brecele bardzo pomocni, doradza pomog\u0105! Wida\u0107, \u017Ce znaj\u0105 si\u0119 na rzeczy. Obs\u0142uga przemi\u0142a i slu\u017Caca pomoc\u0105 znaj\u0105ca si\u0119 na rzeczy. Polecam sma\u017Calnia na ka\u017Cda kiesze\u0144 i na ka\u017Cdego smakosza ryb! Paprykarz przepyszny, go\u0142abki z ryby w sosie pomidorowym pycha, i burger rybny pikabello, polecam z czystym sumieniem! Brak zdj\u0119\u0107 bo znikn\u0119\u0142o wszystko z talerzy. Czas oczekiwania jest naprawd\u0119 szybki, szybszy ni\u017C w nie jednym fast foodzie! Warto czeka\u0107!",
         source: "Google"
       },
       {
         author_name: "Anita Staszewska",
         rating: 5,
-        relative_time_description: "Miesi\u0105c temu",
+        relative_time_description: "",
         profile_photo_url: "",
         text: "Bardzo polecam \u201CLivia\u201D Sma\u017Calnia i w\u0119dzarnia ryb,szasz\u0142yk \u201Cryby u Ciszk\xF3w\u201D TRADYCJ\u0104 OD POKOLE\u0143\u2026 \u2014 \u015Bwie\u017Ce ryby, \u015Bwietnie doprawione i bardzo smaczne. Fishburger naprawd\u0119 rewelacyjny, soczysty i dobrze skomponowany, a go\u0142\u0105bki rybne to co\u015B wyj\u0105tkowego i wartego spr\xF3bowania. W\u0119dzone ryby pachn\u0105 i smakuj\u0105 jak prawdziwe domowe wyroby. Do tego mi\u0142a obs\u0142uga i fajny nadmorski klimat. Zdecydowanie jedno z tych miejsc, do kt\xF3rych chce si\u0119 wraca\u0107 podczas pobytu w Niechorzu.",
         source: "Google"
