@@ -9,28 +9,28 @@ export const PRODUCTS_SHOWCASE = [
     id: 1,
     title: "Paprykarz",
     desc: "Wyrób własny wg tradycyjnej receptury, z najlepszych gatunków ryb z dodatkiem ryżu i aromatycznych przypraw.",
-    image: "https://i.ibb.co/Q3kM5CSs/paprykarz.jpg",
+    image: "https://i.ibb.co/RkDdvXF6/paprykarz.webp",
     alt: "domowy paprykarz rybny - smażalnia niechorze, wędzarnia niechorze, ryby niechorze"
   },
   {
     id: 2,
     title: "Łosoś z pieca",
     desc: "W aksamitnym sosie szpinakowym, pieczony do idealnej soczystości.",
-    image: "https://i.ibb.co/ksQ03Jzv/lososzpieca.jpg",
+    image: "https://i.ibb.co/tTYR6Vgb/lososzpieca.webp",
     alt: "łosoś z pieca w sosie szpinakowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 3,
     title: "Gołąbki rybne",
     desc: "W tradycyjnym sosie pomidorowym, lekka i wyborna alternatywa dla mięsa.",
-    image: "https://i.ibb.co/5WjSnT21/golabki.jpg",
+    image: "https://i.ibb.co/MkKQ159R/golabkirybne.webp",
     alt: "gołąbki rybne w sosie pomidorowym - smażalnia niechorze, ryby niechorze"
   },
   {
     id: 4,
     title: "Halibut",
     desc: "W szlachetnym sosie kurkowym, podawany prosto z pieca.",
-    image: "https://i.ibb.co/k21V53FP/halibut.jpg",
+    image: "https://i.ibb.co/1fhJWFsB/halibut.webp",
     alt: "pieczony halibut w sosie kurkowym - smażalnia niechorze, ryby niechorze"
   }
 ];
