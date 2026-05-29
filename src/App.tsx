@@ -336,8 +336,8 @@ export default function App() {
       .catch(localErr => {
         console.warn("Relative /api/reviews failed (expected on static pure-frontend deployments):", localErr);
 
-        // Fallback: Check if there is an active client-side Google Places key defined
-        const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY;
+        // Fallback: Check if there is an active client-side Google Places key defined (fallback to user's provided production key)
+        const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY || "AIzaSyANzPe5dAD46dreNcCBGsEg6Rm0P57LGG8";
         const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || (window as any).GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
 
         if (clientApiKey && clientApiKey.trim() !== "") {
