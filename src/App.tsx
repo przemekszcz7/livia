@@ -338,7 +338,7 @@ export default function App() {
 
         // Fallback: Check if there is an active client-side Google Places key defined
         const clientApiKey = ((import.meta as any).env?.VITE_GOOGLE_PLACES_API_KEY) || (window as any).GOOGLE_PLACES_API_KEY;
-        const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
+        const placeId = ((import.meta as any).env?.VITE_GOOGLE_PLACE_ID) || (window as any).GOOGLE_PLACE_ID || "ChIJDdlSqnB2AEcRwHXXkdm_Wvs"; // Default Livia Place ID
 
         if (clientApiKey && clientApiKey.trim() !== "") {
           console.log("Triggering client-side secure SDK fetch for Google reviews...");
