@@ -63,10 +63,32 @@ for (const targetFile of targetFiles) {
         console.error(`Failed to inline CSS in ${targetFile}: ${err.message}`);
       }
     }
+
+    // Inject Google Places API Key and Place ID into HTML client-side globals if config is present at build-time.
+    // This allows pure-frontend static deployments (like GitHub Pages/Vercel/cPanel) to dynamically load the key.
+    const configApiKey = process.env.GOOGLE_PLACES_API_KEY;
+    const configPlaceId = process.env.GOOGLE_PLACE_ID;
     
-    if (replaced) {
+    let injectedConfig = '';
+    if (configApiKey && configApiKey.trim() !== '') {
+      injectedConfig += `\n  <script>window.GOOGLE_PLACES_API_KEY = ${JSON.stringify(configApiKey.trim())};</script>`;
+    }
+    if (configPlaceId && configPlaceId.trim() !== '') {
+      injectedConfig += `\n  <script>window.GOOGLE_PLACE_ID = ${JSON.stringify(configPlaceId.trim())};</script>`;
+    }
+    
+    if (injectedConfig) {
+      if (html.includes('</head>')) {
+        html = html.replace('</head>', `${injectedConfig}\n</head>`);
+        console.log(`Injected build-time Google config into ${path.basename(targetFile)}`);
+      }
+    }
+    
+    if (replaced || injectedConfig) {
       fs.writeFileSync(targetFile, html, 'utf-8');
-      console.log(`Successfully inlined all CSS styles into ${path.basename(targetFile)}!`);
+      if (replaced) {
+        console.log(`Successfully inlined all CSS styles into ${path.basename(targetFile)}!`);
+      }
     } else {
       console.log(`No CSS files found or matches resolved to inline in ${path.basename(targetFile)}.`);
     }
@@ -76,14 +98,15 @@ for (const targetFile of targetFiles) {
 }
 
 // Clean up the standalone CSS files now that ALL HTML pages have been injected
+// Keep them to guarantee that any external preload references do not result in a 404!
 for (const cssFilePath of cssFilesToDelete) {
   try {
     if (fs.existsSync(cssFilePath)) {
-      fs.unlinkSync(cssFilePath);
-      console.log(`Cleaned up original standalone file: ${path.basename(cssFilePath)}`);
+      // fs.unlinkSync(cssFilePath);
+      console.log(`Keeping compiled standalone file on disk to prevent preload 404s: ${path.basename(cssFilePath)}`);
     }
   } catch (err) {
-    console.error(`Failed to delete CSS file ${cssFilePath}: ${err.message}`);
+    console.error(`Failed to verify CSS file ${cssFilePath}: ${err.message}`);
   }
 }
 
