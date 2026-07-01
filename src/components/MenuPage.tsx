@@ -81,13 +81,21 @@ export const FULL_MENU_DATA = [
     description: "Codzienny świeży uchył z naszej rzemieślniczej wędzarni opalanej drewnem olchowym i bukowym",
     items: [
       { name: "Węgorz wędzony", suffix: "absolutny rarytas i duma wędzarni" },
-      { name: "Łosoś wędzony na zimno / gorąco", suffix: "delikatny, rozpływający się w ustach" },
-      { name: "Halibut wędzony", suffix: "bardzo soczysty o białym mięsie" },
-      { name: "Antar wędzony", suffix: "tłusta, wyrazista ryba" },
-      { name: "Dorsz wędzony", suffix: "chude i delikatne mięso o niesamowitym aromacie" },
-      { name: "Śledź wędzony (pikling)", suffix: "tradycyjny bałtycki przysmak" },
-      { name: "Makrela wędzona", suffix: "klasyka polskiego stołu wędzalniczego" },
-      { name: "Karmazyn / Pstrąg / Trewal / Gładzica / Morszczuk", suffix: "szeroki asortyment wędzarniczy u Ciszków" }
+      { name: "Antar wędzony", suffix: "wyjątkowo tłusta, wyrazista i rzadka ryba" },
+      { name: "Łosoś filet", suffix: "soczysty i gruby płat, delikatnie wędzony" },
+      { name: "Łosoś dzwonko", suffix: "tradycyjny dzwonko pełne aromatycznego smaku" },
+      { name: "Halibut", suffix: "bardzo soczysty o delikatnym, białym mięsie" },
+      { name: "Maślana", suffix: "aksamitna, delikatna i rozpływająca się w ustach" },
+      { name: "Dorsz", suffix: "delikatne, chude i zwarte mięso" },
+      { name: "Trewal", suffix: "jędrna ryba o wyjątkowym, głębokim smaku" },
+      { name: "Karmazyn", suffix: "wyrazista i delikatna ryba o pięknej barwie" },
+      { name: "Pstrąg", suffix: "tradycyjny pstrąg z naturalnego dymu" },
+      { name: "Sielawa", suffix: "mała, ale niezwykle szlachetna i smaczna ryba" },
+      { name: "Gładzica", suffix: "delikatna, miękka i niesamowicie aromatyczna" },
+      { name: "Morszczuk", suffix: "chuda, lekka i bardzo smaczna wędzonka" },
+      { name: "Makrela", suffix: "klasyka polskiego stołu wędzalniczego" },
+      { name: "Śledź", suffix: "tradycyjny bałtycki przysmak o głębokim zapachu" },
+      { name: "Łosoś wędzony na zimno", suffix: "ekskluzywny, maślany, idealny na plastry" }
     ]
   }
 ];
