@@ -155,7 +155,8 @@ const FULL_MENU = [
       "Gołąbki rybne w sosie pomidorowym",
       "Fishburger",
       "Bułka ze śledziem",
-      "Sałatki Śledziowe",
+      "Pasta z ryb wędzonych (wyrób własny)",
+      "Sałatki Śledziowe w różnych smakach (Kaszubski, warzywny, konserwowy, szczypiorkowy, musztardowy, czosnkowy)",
       "Paprykarz (wyrób własny)"
     ]
   },
