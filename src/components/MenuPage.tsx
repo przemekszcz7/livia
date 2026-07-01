@@ -63,7 +63,19 @@ export const FULL_MENU_DATA = [
       { name: "Gołąbki rybne w sosie pomidorowym", suffix: "delikatny farsz rybny w liściach kapusty" },
       { name: "Fishburger u Ciszków", suffix: "soczysty kawałek ryby w chrupiącej bułce z autorskimi dodatkami" },
       { name: "Bułka ze śledziem", suffix: "klasyk znad morza z cebulką" },
-      { name: "Sałatki Śledziowe w różnych smakach", suffix: "marynowane wg tradycyjnych receptur" },
+      { name: "Pasta z ryb wędzonych (wyrób własny)", suffix: "pyszna, kremowa pasta z rzemieślniczych ryb wędzonych z naszej własnej wędzarni" },
+      { 
+        name: "Sałatki Śledziowe (wyrób własny)", 
+        suffix: "świeże sałatki marynowane u Ciszków według tradycyjnych receptur domowych, dostępne w smakach:",
+        subItems: [
+          "śledź a'la po kaszubsku",
+          "śledź w oleju z warzywami",
+          "śledź w zalewie konserwowej",
+          "śledź w zalewie szczypiorkowej",
+          "śledź w musztardzie",
+          "śledź w czosnku"
+        ]
+      },
       { name: "Paprykarz (wyrób własny)", suffix: "prawdopodobnie najlepszy na polskim wybrzeżu" }
     ]
   },
@@ -263,6 +275,13 @@ export default function MenuPage({ onBackToHome }: MenuPageProps) {
                         <span className="text-text-muted text-xs font-body mt-1 pl-1">
                           {item.suffix}
                         </span>
+                      )}
+                      {('subItems' in item) && (item as any).subItems && (
+                        <ul className="mt-2.5 pl-4 list-disc list-inside text-sm text-text-muted/95 space-y-1.5">
+                          {((item as any).subItems as string[]).map((sub, sIdx) => (
+                            <li key={sIdx} className="font-body italic font-medium tracking-wide">{sub}</li>
+                          ))}
+                        </ul>
                       )}
                     </div>
                   ))}
