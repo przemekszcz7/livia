@@ -177,7 +177,7 @@ const FAQ_ITEMS = [
   },
   {
     question: "Jak długo można przechowywać wędzoną rybę kupioną na wynos?",
-    answer: "Wędzona ryba kupiona na wynos powinna być przechowywana w lodówce i spożyta w ciągu 2–3 dni. Najlepiej smakuje w dniu zakupu — wtedy aromat dymu jest najbardziej intensywny."
+    answer: "Wędzona ryba kupiona na wynos, hermetycznie zapakowana, może być przechowywana w lodówce do 2 tygodni. Najlepiej smakuje, gdy aromat świeżego dymu jest najbardziej intensywny."
   },
   {
     question: "Jak dojechać do Niechorza samochodem?",
